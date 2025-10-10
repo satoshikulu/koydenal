@@ -48,6 +48,16 @@ const Navbar = () => {
                 İlan Ver
               </Link>
             </li>
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                to="/admin"
+                style={{ fontSize: '0.85rem', opacity: 0.8 }}
+                title="Admin Paneli"
+              >
+                ⚙️ Admin
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

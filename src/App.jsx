@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Products from './pages/Products';
 import CreateAd from './pages/CreateAd';
 import ProductDetail from './pages/ProductDetail';
+import AdminPanel from './components/AdminPanel';
 import Footer from './components/Footer';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
             <Route path="/urunler" element={<Products />} />
             <Route path="/ilan-ver" element={<CreateAd />} />
             <Route path="/ilan-detay/:id" element={<ProductDetail />} />
+            <Route path="/admin" element={<AdminPanel />} />
           </Routes>
           <Footer />
         </div>

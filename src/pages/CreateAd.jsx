@@ -10,7 +10,6 @@ const CreateAd = () => {
     price: '',
     unit: '',
     quantity: '',
-    region: '',
     mahalle: '',
     locationOther: '',
     description: '',
@@ -23,7 +22,7 @@ const CreateAd = () => {
   const [errors, setErrors] = useState({});
   const [imagePreview, setImagePreview] = useState([]);
 
-  const { mahalleler } = useData();
+  const { mahalleler = [] } = useData();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,20 +34,27 @@ const CreateAd = () => {
     }
   }, []);
 
+  // Mahalle değiştiğinde diğer alanı göster/gizle
+  useEffect(() => {
+    const otherWrap = document.getElementById('locationOtherWrap');
+    if (formData.mahalle === 'DİĞER') {
+      otherWrap.style.display = 'block';
+    } else if (formData.mahalle && formData.mahalle !== 'DİĞER') {
+      otherWrap.style.display = 'none';
+      // Sadece mahalle değiştiğinde ve DİĞER seçili değilken locationOther'ı temizle
+      if (formData.locationOther !== '') {
+        // Direkt DOM manipülasyonu ile temizle (state güncellemesi yapma)
+        const locationOtherInput = document.getElementById('locationOther');
+        if (locationOtherInput) {
+          locationOtherInput.value = '';
+        }
+      }
+    }
+  }, [formData.mahalle]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-
-    // Mahalle değiştiğinde diğer alanı göster/gizle
-    if (name === 'mahalle') {
-      const otherWrap = document.getElementById('locationOtherWrap');
-      if (value === 'DİĞER') {
-        otherWrap.style.display = '';
-      } else {
-        otherWrap.style.display = 'none';
-        setFormData(prev => ({ ...prev, locationOther: '' }));
-      }
-    }
   };
 
   const handleImageChange = (e) => {
@@ -81,10 +87,6 @@ const CreateAd = () => {
 
     if (!formData.quantity || Number(formData.quantity) < 1) {
       newErrors.quantity = 'Miktar 1 ve üzeri olmalı.';
-    }
-
-    if (!formData.region) {
-      newErrors.region = 'Bölge seçiniz.';
     }
 
     if (!formData.mahalle) {
@@ -128,7 +130,6 @@ const CreateAd = () => {
       price: Number(formData.price),
       unit: formData.unit,
       quantity: Number(formData.quantity),
-      region: formData.region,
       mahalle: chosenMahalle,
       description: formData.description,
       sellerName: formData.sellerName,
@@ -254,14 +255,7 @@ const CreateAd = () => {
                         name="mahalle"
                         className={`form-select ${errors.mahalle ? 'is-invalid' : ''}`}
                         value={formData.mahalle}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (value === 'DİĞER') {
-                            document.getElementById('locationOtherWrap').style.display = 'block';
-                          } else {
-                            document.getElementById('locationOtherWrap').style.display = 'none';
-                          }
-                        }}
+                        onChange={handleInputChange}
                         required
                       >
                         <option value="">Seçiniz</option>
