@@ -165,21 +165,15 @@ INSERT INTO categories (id, name, description, icon, created_at) VALUES
 ('0a943db0-9b30-411b-9ebb-f5ba9882a7bb', 'Bakliyat', 'Mercimek, nohut, fasulye gibi bakliyat ürünleri', '🫘', NOW()),
 ('af2c27dc-707d-48e3-b685-d45249903dd0', 'Hayvancılık', 'Büyükbaş, küçükbaş hayvanlar ve ürünleri', '🐄', NOW()),
 ('c9641343-52e1-46e6-bd76-d5982293dc84', 'Ekipman', 'Traktör, pulluk, sulama sistemleri', '🚜', NOW())
-ON CONFLICT (id) DO NOTHING;
-
 -- =====================================================
--- ADIM 5: İNDEXLER
+-- ADIM 5: İNDEXLER (Performans için)
 -- =====================================================
 
 CREATE INDEX IF NOT EXISTS idx_listings_status ON listings(status);
 CREATE INDEX IF NOT EXISTS idx_listings_category ON listings(category_id);
 CREATE INDEX IF NOT EXISTS idx_listings_user ON listings(user_id);
-CREATE INDEX IF EXISTS idx_listings_location ON listings(location);
+CREATE INDEX IF NOT EXISTS idx_listings_location ON listings(location);
 CREATE INDEX IF NOT EXISTS idx_listings_created_at ON listings(created_at);
-
--- =====================================================
--- ADIM 6: TEST İLANI EKLE
--- =====================================================
 
 -- Test ilanı eklemek için önce test kullanıcısı oluşturun
 /*
