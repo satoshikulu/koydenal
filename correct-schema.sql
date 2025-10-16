@@ -165,6 +165,8 @@ INSERT INTO categories (id, name, description, icon, created_at) VALUES
 ('0a943db0-9b30-411b-9ebb-f5ba9882a7bb', 'Bakliyat', 'Mercimek, nohut, fasulye gibi bakliyat ürünleri', '🫘', NOW()),
 ('af2c27dc-707d-48e3-b685-d45249903dd0', 'Hayvancılık', 'Büyükbaş, küçükbaş hayvanlar ve ürünleri', '🐄', NOW()),
 ('c9641343-52e1-46e6-bd76-d5982293dc84', 'Ekipman', 'Traktör, pulluk, sulama sistemleri', '🚜', NOW())
+ON CONFLICT (id) DO NOTHING;
+
 -- =====================================================
 -- ADIM 5: İNDEXLER (Performans için)
 -- =====================================================
@@ -175,51 +177,8 @@ CREATE INDEX IF NOT EXISTS idx_listings_user ON listings(user_id);
 CREATE INDEX IF NOT EXISTS idx_listings_location ON listings(location);
 CREATE INDEX IF NOT EXISTS idx_listings_created_at ON listings(created_at);
 
--- Test ilanı eklemek için önce test kullanıcısı oluşturun
-/*
-INSERT INTO listings (
-  title,
-  description,
-  price,
-  currency,
-  location,
-  category_id,
-  listing_type,
-  status,
-  quantity,
-  unit,
-  contact_phone,
-  contact_email,
-  contact_person,
-  images,
-  main_image,
-  user_id,
-  created_at,
-  updated_at
-) VALUES (
-  'Test İlanı - Organik Domates',
-  'Test için oluşturulan örnek ilan açıklaması',
-  25.50,
-  'TRY',
-  'Kulu, Konya',
-  '51022018-881c-4b1d-a963-bd66bae1f446',
-  'ürün',
-  'pending',
-  100,
-  'kg',
-  '+905551234567',
-  'test@example.com',
-  'Test Kullanıcısı',
-  ARRAY['https://picsum.photos/400/300?random=1'],
-  'https://picsum.photos/400/300?random=1',
-  (SELECT id FROM auth.users WHERE email = 'test@example.com' LIMIT 1),
-  NOW(),
-  NOW()
-);
-*/
-
 -- =====================================================
--- ADIM 7: KONTROL VE DOĞRULAMA
+-- ADIM 6: KONTROL VE DOĞRULAMA
 -- =====================================================
 
 -- Tüm kategorileri listele
