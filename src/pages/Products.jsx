@@ -309,7 +309,24 @@ const Products = () => {
                           window.open(`mailto:${email}?subject=${encodeURIComponent('KöydenAL - ' + item.title)}`);
                         }}
                       >
-                        İletişime Geç
+                        📧 E-posta ile İletişim
+                      </button>
+                      <button
+                        className="btn btn-outline-primary"
+                        onClick={() => {
+                          const phone = item.user_profiles?.phone || item.contact_phone || '';
+                          if (phone) {
+                            if (phone.startsWith('+90') || phone.startsWith('90')) {
+                              window.open(`https://wa.me/${phone.replace(/\D/g, '')}`);
+                            } else {
+                              window.open(`tel:${phone}`);
+                            }
+                          } else {
+                            alert('Telefon numarası bulunamadı');
+                          }
+                        }}
+                      >
+                        📱 Telefon/WhatsApp
                       </button>
                     </div>
                   </div>
