@@ -82,9 +82,9 @@ export const demoItems = [
 ];
 
 const categories = [
-  { id: 'besi', name: 'Besi Hayvanı', img: 'https://images.unsplash.com/photo-1707681055087-ba19e52ccfd5?q=80&w=1752&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+  { id: 'besi', name: 'Besi Hayvanı', img: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
   { id: 'kumes', name: 'Kümes & Yumurta', img: 'https://images.unsplash.com/photo-1570802685082-2224bd954723?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
-  { id: 'sebze', name: 'Sebze & Meyve', img: 'https://images.unsplash.com/photo-1620870634313-01fcc2fd0da0?q=80&w=1742&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+  { id: 'sebze', name: 'Sebze & Meyve', img: 'https://images.unsplash.com/photo-1590779033100-9f60a05a013d?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
   { id: 'sut', name: 'Süt & Peynir', img: 'https://images.unsplash.com/photo-1752401984784-74bb3b095745?q=80&w=800&h=600&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }
 ];
 

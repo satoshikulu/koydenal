@@ -70,18 +70,9 @@ export const AdminProvider = ({ children }) => {
       const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD;
 
       if (password === adminPassword) {
-        // If no user is logged in, we need to handle this differently
-        // For now, we'll assume the user needs to be logged in first
-        const { data: { user } } = await supabase.auth.getUser();
-
-        if (user) {
-          // Update user role to admin (this would typically be done by a super admin)
-          // For demo purposes, we'll check against a hardcoded password
-          setIsAdmin(true);
-          return { success: true };
-        } else {
-          return { success: false, error: 'Lütfen önce giriş yapın' };
-        }
+        // Şifre doğruysa doğrudan admin erişimi ver
+        setIsAdmin(true);
+        return { success: true };
       } else {
         return { success: false, error: 'Geçersiz admin şifresi' };
       }

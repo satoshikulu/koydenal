@@ -1,8 +1,17 @@
 // src/components/Navbar.jsx
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const Navbar = () => {
   const location = useLocation();
+  const { user, logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+  };
+
+  // Ana sayfada mıyız kontrolü
+  const isHomePage = location.pathname === '/';
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
@@ -23,15 +32,31 @@ const Navbar = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
-            <li className="nav-item">
-              <a className="nav-link" href="#kategoriler">Kategoriler</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#nedenbiz">Neden Biz?</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#iletisim">İletişim</a>
-            </li>
+            {/* Ana sayfa section linkleri - sadece ana sayfada göster */}
+            {isHomePage ? (
+              <>
+                <li className="nav-item">
+                  <a className="nav-link" href="#kategoriler">Kategoriler</a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#nedenbiz">Neden Biz?</a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#iletisim">İletişim</a>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/">Ana Sayfa</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/#kategoriler">Kategoriler</Link>
+                </li>
+              </>
+            )}
+
+            {/* Diğer sayfa linkleri */}
             <li className="nav-item">
               <Link
                 className={`nav-link ${location.pathname === '/urunler' ? 'active' : ''}`}
@@ -48,6 +73,48 @@ const Navbar = () => {
                 İlan Ver
               </Link>
             </li>
+
+            {/* Auth bölümü */}
+            {user ? (
+              <>
+                <li className="nav-item">
+                  <span className="nav-link" style={{ color: '#ffc107' }}>
+                    Merhaba, {user.email}
+                  </span>
+                </li>
+                <li className="nav-item">
+                  <button
+                    className="btn btn-outline-light btn-sm ms-2"
+                    onClick={handleLogout}
+                    style={{ fontSize: '0.85rem' }}
+                  >
+                    Çıkış
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link ${location.pathname === '/login' ? 'active' : ''}`}
+                    to="/login"
+                    style={{ fontSize: '0.85rem' }}
+                  >
+                    Giriş
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link ${location.pathname === '/register' ? 'active' : ''}`}
+                    to="/register"
+                    style={{ fontSize: '0.85rem' }}
+                  >
+                    Kayıt
+                  </Link>
+                </li>
+              </>
+            )}
+
             <li className="nav-item">
               <Link
                 className="nav-link"
