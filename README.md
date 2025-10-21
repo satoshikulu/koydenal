@@ -1,16 +1,97 @@
-# React + Vite
+# Kulu Tarım - Tarımsal İlan Platformu
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Bu proje, Kulu ilçesindeki çiftçiler ve üreticiler için hazırlanmış bir tarımsal ilan platformudur. Üreticiler ürün ilanı verebilir, alıcılar ise bu ilanları görüntüleyebilir.
 
-Currently, two official plugins are available:
+## Özellikler
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Kullanıcı kaydı ve girişi
+- İlan oluşturma (admin onayı gerekir)
+- Kategori bazlı ilan listeleme
+- Detaylı ilan görüntüleme
+- Admin paneli ile ilan onay/red işlemleri
+- Responsive tasarım
 
-## React Compiler
+## Teknolojiler
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 18
+- Vite
+- Supabase (Authentication & Database)
+- Bootstrap 5
 
-## Expanding the ESLint configuration
+## Kurulum
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Gereksinimler
+
+- Node.js 16+
+- npm veya yarn
+- Supabase hesabı
+
+### Adımlar
+
+1. Repoyu klonlayın:
+```bash
+git clone <repo-url>
+cd kulu-tarim
+```
+
+2. Bağımlılıkları yükleyin:
+```bash
+npm install
+```
+
+3. .env dosyasını oluşturun ve Supabase bilgilerinizi ekleyin:
+```
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+4. Veritabanı şemasını kurun (aşağıya bakın)
+
+5. Uygulamayı başlatın:
+```bash
+npm run dev
+```
+
+## Veritabanı Kurulumu
+
+Proje için gerekli olan Supabase veritabanı şeması `kulu-tarim-complete-schema.sql` dosyasında bulunmaktadır.
+
+1. Supabase Dashboard'a gidin
+2. SQL Editor'ü açın
+3. `kulu-tarim-complete-schema.sql` dosyasının içeriğini kopyalayın ve çalıştırın
+4. Admin kullanıcısı oluşturun
+
+Detaylı kurulum talimatları için `DATABASE_SETUP.md` dosyasına bakın.
+
+## Kullanım
+
+1. Uygulamayı başlatın: `npm run dev`
+2. Tarayıcınızda `http://localhost:5173` adresine gidin
+3. Kayıt olun veya giriş yapın
+4. İlan oluşturmak için "İlan Ver" butonuna tıklayın
+5. Admin olarak giriş yaptıysanız, "/admin" adresinden admin paneline erişebilirsiniz
+
+## Admin Paneli
+
+Admin paneli üzerinden:
+- Beklemede olan ilanları görüntüleyebilir
+- İlanları onaylayabilir veya reddedebilir
+- Reddedilen ilanlar için neden belirtebilirsiniz
+
+Admin kullanıcısı oluşturmak için `DATABASE_SETUP.md` dosyasındaki talimatları izleyin.
+
+## Katkıda Bulunma
+
+1. Forklayın
+2. Yeni bir branch oluşturun (`git checkout -b feature/yeni-ozellik`)
+3. Değişikliklerinizi commit edin (`git commit -am 'Yeni özellik ekle'`)
+4. Branch'inizi push edin (`git push origin feature/yeni-ozellik`)
+5. Pull request oluşturun
+
+## Lisans
+
+Bu proje MIT lisansı ile lisanslanmıştır.
+
+---
+
+*Sevim tarafından yapılmıştır*

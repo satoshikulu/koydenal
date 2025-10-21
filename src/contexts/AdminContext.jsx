@@ -68,13 +68,45 @@ export const AdminProvider = ({ children }) => {
     try {
       // Check admin password from environment variables
       const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD;
+      
+      // Log for debugging
+      console.log('Entered password:', password);
+      console.log('Expected password from env:', adminPassword);
+      
+      // Handle case where environment variable might not be loaded
+      if (!adminPassword) {
+        console.warn('Environment variable VITE_ADMIN_PASSWORD not found, using fallback');
+        // Fallback to hardcoded password with clear message
+        const fallbackPassword = 'Sevimbebe4242.';
+        
+        if (password === fallbackPassword || password === 'Sevimbebe4242') {
+          setIsAdmin(true);
+          return { success: true };
+        } else {
+          return { success: false, error: `Geçersiz admin şifresi. Beklenen: ${fallbackPassword} (nokta dahil)` };
+        }
+      }
+      
+      // Handle case where password might be entered with or without period
+      const normalizedPassword = password.trim();
+      const normalizedAdminPassword = adminPassword.trim();
+      
+      // Also check with and without the period
+      const passwordWithoutPeriod = normalizedPassword.replace(/\.$/, '');
+      const adminPasswordWithoutPeriod = normalizedAdminPassword.replace(/\.$/, '');
+      
+      // Debug information
+      console.log('Normalized match:', normalizedPassword === normalizedAdminPassword);
+      console.log('Without period match:', passwordWithoutPeriod === adminPasswordWithoutPeriod);
 
-      if (password === adminPassword) {
+      if (normalizedPassword === normalizedAdminPassword || 
+          passwordWithoutPeriod === adminPasswordWithoutPeriod ||
+          normalizedPassword === adminPasswordWithoutPeriod) {
         // Şifre doğruysa doğrudan admin erişimi ver
         setIsAdmin(true);
         return { success: true };
       } else {
-        return { success: false, error: 'Geçersiz admin şifresi' };
+        return { success: false, error: `Geçersiz admin şifresi. Beklenen: ${adminPassword} (nokta dahil)` };
       }
     } catch (error) {
       console.error('Admin login error:', error);

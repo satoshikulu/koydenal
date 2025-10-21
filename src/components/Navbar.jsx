@@ -73,6 +73,16 @@ const Navbar = () => {
                 İlan Ver
               </Link>
             </li>
+            <li className="nav-item">
+              <Link
+                className={`nav-link ${location.pathname === '/misafir-ilan-ver' ? 'active' : ''}`}
+                to="/misafir-ilan-ver"
+                style={{ backgroundColor: '#ffc107', color: '#000', borderRadius: '4px' }}
+                title="Üye olmadan ilan ver"
+              >
+                🚀 Hızlı İlan Ver
+              </Link>
+            </li>
 
             {/* Auth bölümü */}
             {user ? (

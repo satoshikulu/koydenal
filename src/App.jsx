@@ -6,10 +6,15 @@ import Home from './pages/Home';
 import Products from './pages/Products';
 import CreateAd from './pages/CreateAd';
 import ProductDetail from './pages/ProductDetail';
-import AdminPanel from './components/AdminPanel';
+import NewAdminPanel from './components/NewAdminPanel';
+import NewAdminDashboard from './components/NewAdminDashboard';
+import TestEnv from './components/TestEnv';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Footer from './components/Footer';
+import GuestListingForm from './components/GuestListingForm';
+import GuestListingManagement from './components/GuestListingManagement';
+import ListingSuccess from './pages/ListingSuccess';
 
 function App() {
   return (
@@ -28,10 +33,14 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/urunler" element={<Products />} />
               <Route path="/ilan-ver" element={<CreateAd />} />
+              <Route path="/misafir-ilan-ver" element={<GuestListingForm />} />
+              <Route path="/ilan-basarili" element={<ListingSuccess />} />
               <Route path="/ilan-detay/:id" element={<ProductDetail />} />
-              <Route path="/admin" element={<AdminPanel />} />
+              <Route path="/ilan-yonetim/:listingId" element={<GuestListingManagement />} />
+              <Route path="/admin" element={<NewAdminDashboard />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/test-env" element={<TestEnv />} />
             </Routes>
             <Footer />
           </div>

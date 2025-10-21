@@ -1,0 +1,4 @@
+input ''25'' false 
+admin panel ''sql '' false
+ print ''(admin panel istemci # burda kullanıcı isteyecek )
+ www.github.

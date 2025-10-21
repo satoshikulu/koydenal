@@ -45,6 +45,9 @@ const AdminLogin = () => {
           <p style={{ color: '#7f8c8d', fontSize: '0.9rem' }}>
             Yönetici girişi için şifre girin
           </p>
+          <p style={{ color: '#3498db', fontSize: '0.8rem', marginTop: '0.5rem' }}>
+            İpucu: Şifre 'Sevimbebe4242.' (nokta dahil)
+          </p>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -88,6 +91,9 @@ const AdminLogin = () => {
               fontSize: '0.9rem'
             }}>
               {error}
+              <div style={{ marginTop: '0.5rem', fontSize: '0.8rem' }}>
+                Beklenen şifre: <strong>Sevimbebe4242.</strong> (nokta dahil)
+              </div>
             </div>
           )}
 
@@ -118,6 +124,9 @@ const AdminLogin = () => {
           color: '#7f8c8d'
         }}>
           <p>Bu panel sadece yetkili adminler içindir</p>
+          <p style={{ marginTop: '0.5rem', color: '#3498db' }}>
+            Varsayılan şifre: <strong>Sevimbebe4242.</strong> (nokta dahil)
+          </p>
         </div>
       </div>
     </div>
