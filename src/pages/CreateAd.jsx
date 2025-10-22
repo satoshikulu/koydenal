@@ -122,12 +122,7 @@ const CreateAd = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!user) {
-      setSubmitError('İlan oluşturmak için önce giriş yapmanız gerekiyor.');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-
+    // Misafir kullanıcılar da ilan verebilir, giriş zorunlu değil
     if (!validateForm()) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
@@ -189,15 +184,15 @@ const CreateAd = () => {
         location: chosenMahalle,
         category_id: kategoriId,
         listing_type: 'ürün',
-        status: 'pending', // Önce onay beklesin
+        status: 'pending', // Admin onayı bekleyecek
         quantity: parseFloat(formData.quantity),
         unit: formData.unit,
         contact_phone: formData.phone,
-        contact_email: formData.email || user.email,
+        contact_email: formData.email || (user ? user.email : null),
         contact_person: formData.sellerName,
         images: imageUrls,
         main_image: imageUrls[0] || null,
-        user_id: user.id
+        user_id: user ? user.id : null // Misafir kullanıcılar için null
       };
 
       console.log('İlan verisi:', listingData);
@@ -216,7 +211,10 @@ const CreateAd = () => {
       console.log('İlan başarıyla oluşturuldu:', data);
 
       // Başarılı mesajı göster ve ana sayfaya yönlendir
-      alert('İlanınız başarıyla oluşturuldu! Admin onayı sonrası yayınlanacak.');
+      const successMessage = user 
+        ? 'İlanınız başarıyla oluşturuldu! Admin onayı sonrası yayınlanacak.' 
+        : 'İlanınız başarıyla oluşturuldu! Admin onayı sonrası yayınlanacak. İlanınızı takip etmek için kayıt olmanızı öneririz.';
+      alert(successMessage);
       navigate('/');
 
     } catch (error) {
