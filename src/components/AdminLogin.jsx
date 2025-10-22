@@ -1,24 +1,55 @@
 import React, { useState } from 'react';
-import { useAdmin } from '../contexts/AdminContext';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
 
 const AdminLogin = () => {
+  const [email, setEmail] = useState('satoshinakamototokyo42@gmail.com');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { loginAsAdmin } = useAdmin();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    const result = await loginAsAdmin(password);
+    try {
+      // Supabase auth ile giriş yap
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
 
-    if (!result.success) {
-      setError(result.error);
+      if (authError) throw authError;
+
+      // Kullanıcının admin olup olmadığını kontrol et
+      const { data: profile, error: profileError } = await supabase
+        .from('user_profiles')
+        .select('role, status')
+        .eq('id', authData.user.id)
+        .single();
+
+      if (profileError) throw profileError;
+
+      if (profile.role !== 'admin') {
+        await supabase.auth.signOut();
+        throw new Error('Bu hesap admin yetkisine sahip değil');
+      }
+
+      if (profile.status !== 'approved') {
+        await supabase.auth.signOut();
+        throw new Error('Admin hesabınız henüz onaylanmamış');
+      }
+
+      // Başarılı giriş - dashboard'a yönlendir
+      navigate('/admin/dashboard');
+    } catch (err) {
+      console.error('Admin login error:', err);
+      setError(err.message || 'Giriş başarısız');
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -43,14 +74,41 @@ const AdminLogin = () => {
             Admin Paneli
           </h2>
           <p style={{ color: '#7f8c8d', fontSize: '0.9rem' }}>
-            Yönetici girişi için şifre girin
-          </p>
-          <p style={{ color: '#3498db', fontSize: '0.8rem', marginTop: '0.5rem' }}>
-            İpucu: Şifre 'Sevimbebe4242.' (nokta dahil)
+            Yönetici girişi için email ve şifre girin
           </p>
         </div>
 
         <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label
+              htmlFor="email"
+              style={{
+                display: 'block',
+                marginBottom: '0.5rem',
+                color: '#2c3e50',
+                fontWeight: '500'
+              }}
+            >
+              Admin Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                border: '2px solid #e0e0e0',
+                borderRadius: '4px',
+                fontSize: '1rem',
+                transition: 'border-color 0.3s'
+              }}
+              placeholder="admin@example.com"
+              required
+            />
+          </div>
+
           <div style={{ marginBottom: '1.5rem' }}>
             <label
               htmlFor="password"
@@ -90,10 +148,7 @@ const AdminLogin = () => {
               marginBottom: '1rem',
               fontSize: '0.9rem'
             }}>
-              {error}
-              <div style={{ marginTop: '0.5rem', fontSize: '0.8rem' }}>
-                Beklenen şifre: <strong>Sevimbebe4242.</strong> (nokta dahil)
-              </div>
+              ❌ {error}
             </div>
           )}
 
@@ -125,7 +180,10 @@ const AdminLogin = () => {
         }}>
           <p>Bu panel sadece yetkili adminler içindir</p>
           <p style={{ marginTop: '0.5rem', color: '#3498db' }}>
-            Varsayılan şifre: <strong>Sevimbebe4242.</strong> (nokta dahil)
+            Admin Email: <strong>satoshinakamototokyo42@gmail.com</strong>
+          </p>
+          <p style={{ marginTop: '0.25rem', color: '#3498db' }}>
+            Şifre: <strong>Sevimbebe4242.</strong>
           </p>
         </div>
       </div>

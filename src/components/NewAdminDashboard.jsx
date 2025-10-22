@@ -89,6 +89,8 @@ const NewAdminDashboard = () => {
       setLoading(true);
       let query;
       
+      console.log('🔍 fetchUsers çağrıldı - Filter:', filter, 'SearchTerm:', searchTerm);
+      
       if (filter === 'pending') {
         query = supabase.from('pending_users').select('*');
       } else if (filter === 'approved') {
@@ -106,10 +108,12 @@ const NewAdminDashboard = () => {
       query = query.order('created_at', { ascending: false });
       const { data, error } = await query;
 
+      console.log('📊 Kullanıcı verisi:', { count: data?.length, error: error?.message });
+      
       if (error) throw error;
       setUsers(data || []);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error('❌ Error fetching users:', error);
       setUsers([]);
     } finally {
       setLoading(false);

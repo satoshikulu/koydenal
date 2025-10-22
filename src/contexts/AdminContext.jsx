@@ -25,15 +25,28 @@ export const AdminProvider = ({ children }) => {
         if (user) {
           const { data: profile } = await supabase
             .from('user_profiles')
-            .select('role')
+            .select('role, status')
             .eq('id', user.id)
             .single();
 
-          setIsAdmin(profile?.role === 'admin');
+          console.log('👤 Admin check:', { 
+            userId: user.id, 
+            role: profile?.role, 
+            status: profile?.status,
+            isAdmin: profile?.role === 'admin' && profile?.status === 'approved'
+          });
+
+          setIsAdmin(profile?.role === 'admin' && profile?.status === 'approved');
           setUser(user);
+        } else {
+          console.log('👤 No user logged in');
+          setIsAdmin(false);
+          setUser(null);
         }
       } catch (error) {
         console.error('Error checking admin status:', error);
+        setIsAdmin(false);
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -44,16 +57,26 @@ export const AdminProvider = ({ children }) => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('🔐 Auth state changed:', event);
+        
         if (event === 'SIGNED_IN' && session?.user) {
           const { data: profile } = await supabase
             .from('user_profiles')
-            .select('role')
+            .select('role, status')
             .eq('id', session.user.id)
             .single();
 
-          setIsAdmin(profile?.role === 'admin');
+          console.log('👤 User signed in:', { 
+            userId: session.user.id, 
+            role: profile?.role,
+            status: profile?.status,
+            isAdmin: profile?.role === 'admin' && profile?.status === 'approved'
+          });
+
+          setIsAdmin(profile?.role === 'admin' && profile?.status === 'approved');
           setUser(session.user);
         } else if (event === 'SIGNED_OUT') {
+          console.log('👤 User signed out');
           setIsAdmin(false);
           setUser(null);
         }
@@ -64,52 +87,52 @@ export const AdminProvider = ({ children }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const loginAsAdmin = async (password) => {
+  const loginAsAdmin = async (email, password) => {
     try {
-      // Check admin password from environment variables
-      const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD;
+      console.log('🔐 Admin login attempt:', email);
       
-      // Log for debugging
-      console.log('Entered password:', password);
-      console.log('Expected password from env:', adminPassword);
-      
-      // Handle case where environment variable might not be loaded
-      if (!adminPassword) {
-        console.warn('Environment variable VITE_ADMIN_PASSWORD not found, using fallback');
-        // Fallback to hardcoded password with clear message
-        const fallbackPassword = 'Sevimbebe4242.';
-        
-        if (password === fallbackPassword || password === 'Sevimbebe4242') {
-          setIsAdmin(true);
-          return { success: true };
-        } else {
-          return { success: false, error: `Geçersiz admin şifresi. Beklenen: ${fallbackPassword} (nokta dahil)` };
-        }
-      }
-      
-      // Handle case where password might be entered with or without period
-      const normalizedPassword = password.trim();
-      const normalizedAdminPassword = adminPassword.trim();
-      
-      // Also check with and without the period
-      const passwordWithoutPeriod = normalizedPassword.replace(/\.$/, '');
-      const adminPasswordWithoutPeriod = normalizedAdminPassword.replace(/\.$/, '');
-      
-      // Debug information
-      console.log('Normalized match:', normalizedPassword === normalizedAdminPassword);
-      console.log('Without period match:', passwordWithoutPeriod === adminPasswordWithoutPeriod);
+      // Supabase auth ile giriş yap
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
 
-      if (normalizedPassword === normalizedAdminPassword || 
-          passwordWithoutPeriod === adminPasswordWithoutPeriod ||
-          normalizedPassword === adminPasswordWithoutPeriod) {
-        // Şifre doğruysa doğrudan admin erişimi ver
-        setIsAdmin(true);
-        return { success: true };
-      } else {
-        return { success: false, error: `Geçersiz admin şifresi. Beklenen: ${adminPassword} (nokta dahil)` };
+      if (authError) {
+        console.error('❌ Auth error:', authError);
+        return { success: false, error: authError.message };
       }
+
+      // Kullanıcının admin olup olmadığını kontrol et
+      const { data: profile, error: profileError } = await supabase
+        .from('user_profiles')
+        .select('role, status')
+        .eq('id', authData.user.id)
+        .single();
+
+      if (profileError) {
+        console.error('❌ Profile error:', profileError);
+        await supabase.auth.signOut();
+        return { success: false, error: 'Profil bilgisi alınamadı' };
+      }
+
+      if (profile.role !== 'admin') {
+        console.error('❌ Not admin:', profile.role);
+        await supabase.auth.signOut();
+        return { success: false, error: 'Bu hesap admin yetkisine sahip değil' };
+      }
+
+      if (profile.status !== 'approved') {
+        console.error('❌ Not approved:', profile.status);
+        await supabase.auth.signOut();
+        return { success: false, error: 'Admin hesabınız henüz onaylanmamış' };
+      }
+
+      console.log('✅ Admin login successful');
+      setIsAdmin(true);
+      setUser(authData.user);
+      return { success: true };
     } catch (error) {
-      console.error('Admin login error:', error);
+      console.error('❌ Admin login error:', error);
       return { success: false, error: 'Giriş hatası oluştu' };
     }
   };
