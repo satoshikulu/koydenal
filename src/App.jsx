@@ -8,6 +8,7 @@ import CreateAd from './pages/CreateAd';
 import ProductDetail from './pages/ProductDetail';
 import NewAdminPanel from './components/NewAdminPanel';
 import NewAdminDashboard from './components/NewAdminDashboard';
+import AdminApprovalDashboard from './components/AdminApprovalDashboard';
 import TestEnv from './components/TestEnv';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -38,6 +39,7 @@ function App() {
               <Route path="/ilan-detay/:id" element={<ProductDetail />} />
               <Route path="/ilan-yonetim/:listingId" element={<GuestListingManagement />} />
               <Route path="/admin" element={<NewAdminDashboard />} />
+              <Route path="/admin/onay" element={<AdminApprovalDashboard />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/test-env" element={<TestEnv />} />
