@@ -32,18 +32,29 @@ const AdminDashboard = () => {
 
     const loadStats = async () => {
         try {
-            const [usersRes, listingsRes] = await Promise.all([
-                supabase.from('user_profiles').select('status', { count: 'exact' }),
-                supabase.from('listings').select('status', { count: 'exact' })
+            console.log('📊 Loading stats...');
+            const [usersRes, pendingUsersRes, listingsRes, pendingListingsRes] = await Promise.all([
+                supabase.from('user_profiles').select('*', { count: 'exact', head: true }),
+                supabase.from('user_profiles').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+                supabase.from('listings').select('*', { count: 'exact', head: true }),
+                supabase.from('listings').select('*', { count: 'exact', head: true }).eq('status', 'pending')
             ]);
+
+            console.log('📊 Stats results:', {
+                totalUsers: usersRes.count,
+                pendingUsers: pendingUsersRes.count,
+                totalListings: listingsRes.count,
+                pendingListings: pendingListingsRes.count
+            });
+
             setStats({
                 totalUsers: usersRes.count || 0,
-                pendingUsers: usersRes.data?.filter(u => u.status === 'pending').length || 0,
+                pendingUsers: pendingUsersRes.count || 0,
                 totalListings: listingsRes.count || 0,
-                pendingListings: listingsRes.data?.filter(l => l.status === 'pending').length || 0
+                pendingListings: pendingListingsRes.count || 0
             });
         } catch (error) {
-            console.error('Stats error:', error);
+            console.error('❌ Stats error:', error);
         }
     };
 
@@ -67,11 +78,16 @@ const AdminDashboard = () => {
     };
 
     const loadListings = async () => {
+        console.log('📋 Loading listings with filter:', filter, 'search:', searchTerm);
         let query = supabase.from('listings').select('*, user_profiles(full_name, email, phone), categories(name, icon)');
         if (filter !== 'all') query = query.eq('status', filter);
         if (searchTerm) query = query.or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`);
         const { data, error } = await query.order('created_at', { ascending: false });
-        if (error) throw error;
+        if (error) {
+            console.error('❌ Listings error:', error);
+            throw error;
+        }
+        console.log('📋 Listings loaded:', data?.length, 'items');
         setListings(data || []);
     };
 
