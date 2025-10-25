@@ -78,17 +78,42 @@ const AdminDashboard = () => {
     };
 
     const loadListings = async () => {
-        console.log('📋 Loading listings with filter:', filter, 'search:', searchTerm);
-        let query = supabase.from('listings').select('*, user_profiles(full_name, email, phone), categories(name, icon)');
-        if (filter !== 'all') query = query.eq('status', filter);
-        if (searchTerm) query = query.or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`);
-        const { data, error } = await query.order('created_at', { ascending: false });
-        if (error) {
-            console.error('❌ Listings error:', error);
-            throw error;
+        try {
+            console.log('📋 Loading listings with filter:', filter, 'search:', searchTerm);
+            
+            // Basit sorgu - join olmadan
+            let query = supabase.from('listings').select('*');
+            
+            if (filter !== 'all') {
+                query = query.eq('status', filter);
+            }
+            
+            if (searchTerm) {
+                query = query.or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`);
+            }
+            
+            const { data, error } = await query.order('created_at', { ascending: false });
+            
+            if (error) {
+                console.error('❌ Listings error:', error);
+                console.error('❌ Error details:', {
+                    message: error.message,
+                    details: error.details,
+                    hint: error.hint,
+                    code: error.code
+                });
+                throw error;
+            }
+            
+            console.log('✅ Listings loaded:', data?.length, 'items');
+            if (data && data.length > 0) {
+                console.log('📋 First listing:', data[0]);
+            }
+            setListings(data || []);
+        } catch (error) {
+            console.error('❌ Unexpected error in loadListings:', error);
+            setListings([]);
         }
-        console.log('📋 Listings loaded:', data?.length, 'items');
-        setListings(data || []);
     };
 
     const handleUserAction = async (userId, action, reason = '') => {
