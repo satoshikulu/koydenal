@@ -105,8 +105,8 @@ const Home = () => {
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">
-          <h1 className="fw-bold mb-3">Üretici ile Alıcıyı Tek Platformda Buluşturuyoruz</h1>
-          <p className="lead mb-4 wave-text">Tarladan sofraya, doğrudan ve güvenli ticaret</p>
+          <h1 className="hero-title fw-bold mb-3">Üretici ile Alıcıyı Tek Platformda Buluşturuyoruz</h1>
+          <p className="hero-subtitle lead mb-4 wave-text">Tarladan sofraya, doğrudan ve güvenli ticaret</p>
           <div className="hero-buttons">
             <button
               className="btn btn-sell"

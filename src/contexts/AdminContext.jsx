@@ -23,18 +23,34 @@ export const AdminProvider = ({ children }) => {
     const checkAdminStatus = async () => {
       try {
         console.log('🔍 Checking admin status...');
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
-        console.log('📥 getUser response:', { user: user?.email, error: userError });
+        
+        // Önce session'ı kontrol et
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        console.log('📥 getSession response:', { 
+          hasSession: !!session, 
+          userEmail: session?.user?.email,
+          error: sessionError 
+        });
 
         if (!mounted) return;
 
-        if (userError) {
-          console.error('❌ Auth error:', userError);
+        if (sessionError) {
+          console.error('❌ Session error:', sessionError);
           setIsAdmin(false);
           setUser(null);
           setLoading(false);
           return;
         }
+
+        if (!session) {
+          console.log('👤 No active session');
+          setIsAdmin(false);
+          setUser(null);
+          setLoading(false);
+          return;
+        }
+
+        const user = session.user;
 
         if (user) {
           console.log('👤 User found:', user.email, '- Fetching profile...');
