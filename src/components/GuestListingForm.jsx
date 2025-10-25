@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { useData } from '../context/DataContext';
 
 const GuestListingForm = () => {
   const [formData, setFormData] = useState({
@@ -21,6 +22,7 @@ const GuestListingForm = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { mahalleler = [] } = useData();
 
   const categories = [
     { id: 'tahıllar', name: 'Tahıllar', icon: '🌾' },
@@ -290,11 +292,9 @@ const GuestListingForm = () => {
                       required
                     >
                       <option value="">Seçiniz</option>
-                      <option value="ACIKUYU MAHALLESİ">Açıkuğu Mahallesi</option>
-                      <option value="ALPARSLAN MAHALLESİ">Alparslan Mahallesi</option>
-                      <option value="CUMHURİYET MAHALLESİ">Cumhuriyet Mahallesi</option>
-                      <option value="KARŞIYAKA MAHALLESİ">Karşıyaka Mahallesi</option>
-                      {/* Diğer mahalleler eklenebilir */}
+                      {mahalleler.map((mahalle) => (
+                        <option key={mahalle} value={mahalle}>{mahalle}</option>
+                      ))}
                     </select>
                     {errors.location && <div className="invalid-feedback">{errors.location}</div>}
                   </div>
