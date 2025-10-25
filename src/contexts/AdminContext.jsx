@@ -79,6 +79,7 @@ export const AdminProvider = ({ children }) => {
         console.log('🔐 Auth state changed:', event, session?.user?.email);
 
         if (event === 'SIGNED_IN' && session?.user) {
+          setLoading(true); // Loading başlat
           const { data: profile, error: profileError } = await supabase
             .from('user_profiles')
             .select('role, status')
@@ -87,6 +88,10 @@ export const AdminProvider = ({ children }) => {
 
           if (profileError) {
             console.error('❌ Profile error on sign in:', profileError);
+            setIsAdmin(false);
+            setUser(session.user);
+            setLoading(false);
+            return;
           }
 
           console.log('👤 User signed in:', {
@@ -98,13 +103,13 @@ export const AdminProvider = ({ children }) => {
 
           setIsAdmin(profile?.role === 'admin' && profile?.status === 'approved');
           setUser(session.user);
+          setLoading(false);
         } else if (event === 'SIGNED_OUT') {
           console.log('👤 User signed out');
           setIsAdmin(false);
           setUser(null);
+          setLoading(false); // Hemen loading'i kapat
         }
-        console.log('🏁 Setting loading to false after auth change...');
-        setLoading(false);
       }
     );
 
@@ -164,15 +169,20 @@ export const AdminProvider = ({ children }) => {
   const logout = async () => {
     try {
       console.log('🚪 Logging out...');
+      setLoading(true); // Loading başlat
       const { error } = await supabase.auth.signOut();
       if (error) {
         console.error('Logout error:', error);
       }
       setIsAdmin(false);
       setUser(null);
+      setLoading(false); // Loading bitir
       console.log('✅ Logged out successfully');
     } catch (error) {
       console.error('Logout error:', error);
+      setIsAdmin(false);
+      setUser(null);
+      setLoading(false); // Hata durumunda da loading bitir
     }
   };
 
