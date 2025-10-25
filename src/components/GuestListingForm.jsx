@@ -93,45 +93,68 @@ const GuestListingForm = () => {
     setLoading(true);
 
     try {
+      console.log('🚀 Misafir ilan oluşturma başladı...');
+      console.log('📝 Form verisi:', formData);
+
       // Kategoriyi al
-      const { data: categoryData } = await supabase
+      console.log('🔍 Kategori aranıyor:', formData.category);
+      const { data: categoryData, error: categoryError } = await supabase
         .from('categories')
-        .select('id')
+        .select('id, name')
         .eq('name', formData.category)
         .single();
+
+      if (categoryError) {
+        console.error('❌ Kategori hatası:', categoryError);
+        throw new Error('Kategori bulunamadı: ' + categoryError.message);
+      }
 
       if (!categoryData) {
         throw new Error('Kategori bulunamadı');
       }
 
+      console.log('✅ Kategori bulundu:', categoryData);
+
+      // İlan verisini hazırla
+      const listingData = {
+        title: formData.title,
+        description: formData.description,
+        price: parseFloat(formData.price),
+        currency: 'TRY',
+        quantity: parseFloat(formData.quantity),
+        unit: formData.unit,
+        location: formData.location,
+        category_id: categoryData.id,
+        listing_type: 'ürün',
+        status: 'pending',
+        contact_phone: formData.phone,
+        contact_email: formData.email || null,
+        contact_person: formData.sellerName,
+        preferred_contact: formData.preferredContact,
+        user_id: null // Misafir kullanıcı
+      };
+
+      console.log('📋 İlan verisi hazırlandı:', listingData);
+
       // İlanı oluştur
       const { data, error } = await supabase
         .from('listings')
-        .insert({
-          title: formData.title,
-          description: formData.description,
-          price: parseFloat(formData.price),
-          currency: 'TRY',
-          quantity: parseFloat(formData.quantity),
-          unit: formData.unit,
-          location: formData.location,
-          category_id: categoryData.id,
-          listing_type: 'ürün',
-          status: 'pending', // Admin onayı gerektirir
-          contact_phone: formData.phone,
-          contact_email: formData.email || null,
-          contact_person: formData.sellerName,
-          preferred_contact: formData.preferredContact,
-          // user_id otomatik null olur (üye olmadan)
-          // listing_secret otomatik oluşturulur
-        })
+        .insert(listingData)
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('❌ İlan oluşturma hatası:', error);
+        if (error.message.includes('row-level security')) {
+          throw new Error('Güvenlik politikası hatası. Lütfen yönetici ile iletişime geçin.');
+        }
+        throw error;
+      }
 
-      // Başarılı! Kullanıcıyı başarı sayfasına yönlendir
-      // Gizli anahtar başarı sayfasında gösterilecek
+      console.log('✅ İlan başarıyla oluşturuldu:', data);
+      console.log('🔑 Gizli anahtar:', data.listing_secret);
+      console.log('📊 İlan ID:', data.id);
+      console.log('📋 İlan Durumu:', data.status);
 
       // Başarılı sayfasına yönlendir
       navigate('/ilan-basarili', {
@@ -142,7 +165,7 @@ const GuestListingForm = () => {
       });
 
     } catch (error) {
-      console.error('İlan oluşturma hatası:', error);
+      console.error('❌ İlan oluşturma hatası:', error);
       alert('İlan oluşturulurken bir hata oluştu: ' + error.message);
     } finally {
       setLoading(false);

@@ -143,12 +143,12 @@ const CreateAd = () => {
 
       // Kategori mapping oluştur (form değerlerini Supabase kategori isimlerine çevir)
       const kategoriMap = {
-        'besi': 'hayvancılık',
-        'kumes': 'bakliyat', // Kümes hayvanları için bakliyat kullanıyoruz
-        'sebze': 'sebzeler',
-        'sut': 'meyveler', // Süt ürünleri için meyveler kullanıyoruz
-        'yem': 'tahıllar', // Yem için tahıllar kullanıyoruz
-        'makine': 'ekipman'
+        'besi': 'Hayvancılık',
+        'kumes': 'Hayvancılık',
+        'sebze': 'Sebzeler',
+        'sut': 'Hayvancılık',
+        'yem': 'Tahıllar',
+        'makine': 'Ekipman'
       };
 
       const kategoriAdi = kategoriMap[formData.kategori];
@@ -157,7 +157,7 @@ const CreateAd = () => {
       }
 
       // Supabase kategori adıyla eşleşen kategoriyi bul
-      const kategori = categoriesData.find(cat => cat.name.toLowerCase() === kategoriAdi);
+      const kategori = categoriesData.find(cat => cat.name.toLowerCase() === kategoriAdi.toLowerCase());
       if (!kategori) {
         throw new Error(`Kategori bulunamadı: ${kategoriAdi}`);
       }
@@ -195,7 +195,7 @@ const CreateAd = () => {
         user_id: user ? user.id : null // Misafir kullanıcılar için null
       };
 
-      console.log('İlan verisi:', listingData);
+      console.log('📝 İlan verisi hazırlandı:', listingData);
 
       // Supabase'e kaydet
       const { data, error } = await supabase
@@ -205,10 +205,13 @@ const CreateAd = () => {
         .single();
 
       if (error) {
+        console.error('❌ Supabase hatası:', error);
         throw new Error(`İlan kaydedilemedi: ${error.message}`);
       }
 
-      console.log('İlan başarıyla oluşturuldu:', data);
+      console.log('✅ İlan başarıyla oluşturuldu:', data);
+      console.log('📊 İlan ID:', data.id);
+      console.log('📋 İlan Durumu:', data.status);
 
       // Başarılı mesajı göster ve ana sayfaya yönlendir
       const successMessage = user 
