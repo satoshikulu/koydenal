@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { useAdmin } from '../contexts/AdminContext';
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState('satoshinakamototokyo42@gmail.com');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { loginAsAdmin } = useAdmin();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,37 +16,17 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      // Supabase auth ile giriş yap
-      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
+      console.log('🔐 Attempting admin login...');
+      const result = await loginAsAdmin(email, password);
 
-      if (authError) throw authError;
-
-      // Kullanıcının admin olup olmadığını kontrol et
-      const { data: profile, error: profileError } = await supabase
-        .from('user_profiles')
-        .select('role, status')
-        .eq('id', authData.user.id)
-        .single();
-
-      if (profileError) throw profileError;
-
-      if (profile.role !== 'admin') {
-        await supabase.auth.signOut();
-        throw new Error('Bu hesap admin yetkisine sahip değil');
+      if (result.success) {
+        console.log('✅ Admin login successful, redirecting...');
+        navigate('/admin');
+      } else {
+        setError(result.error || 'Giriş başarısız');
       }
-
-      if (profile.status !== 'approved') {
-        await supabase.auth.signOut();
-        throw new Error('Admin hesabınız henüz onaylanmamış');
-      }
-
-      // Başarılı giriş - dashboard'a yönlendir
-      navigate('/admin/dashboard');
     } catch (err) {
-      console.error('Admin login error:', err);
+      console.error('❌ Admin login error:', err);
       setError(err.message || 'Giriş başarısız');
     } finally {
       setLoading(false);
@@ -178,13 +159,7 @@ const AdminLogin = () => {
           fontSize: '0.85rem',
           color: '#7f8c8d'
         }}>
-          <p>Bu panel sadece yetkili adminler içindir</p>
-          <p style={{ marginTop: '0.5rem', color: '#3498db' }}>
-            Admin Email: <strong>satoshinakamototokyo42@gmail.com</strong>
-          </p>
-          <p style={{ marginTop: '0.25rem', color: '#3498db' }}>
-            Şifre: <strong>Sevimbebe4242.</strong>
-          </p>
+          <p>🔒 Bu panel sadece yetkili adminler içindir</p>
         </div>
       </div>
     </div>

@@ -1299,8 +1299,168 @@ footer {
   .hero {
     background-size: cover;
   }
+}
 
-  .category-card img {
-    image-rendering: -webkit-optimize-contrast;
+/* ========================================
+   MOBIL MENÜ & TOUCH DESTEĞİ
+   ======================================== */
+
+/* Mobile menu animations */
+.mobile-menu-backdrop {
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.mobile-menu-container {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Smooth hamburger icon animation */
+.navbar-toggler-icon {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced mobile menu animations */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Improved mobile touch targets */
+@media (max-width: 991px) {
+  .navbar-nav .nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    margin: 0.25rem 0;
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .navbar-nav .nav-link:hover,
+  .navbar-nav .nav-link:focus {
+    background-color: rgba(13, 110, 253, 0.1);
+    transform: translateX(5px);
+    outline: none;
+  }
+
+  .navbar-nav .nav-link:active {
+    transform: translateX(3px) scale(0.98);
+  }
+
+  /* Prevent text selection in mobile menu */
+  .mobile-menu-container * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Allow text selection for links only */
+  .mobile-menu-container a,
+  .mobile-menu-container button {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
+/* Enhanced button interactions for mobile */
+@media (max-width: 991px) {
+  button {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+
+  .btn {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn:active {
+    transform: scale(0.95);
+  }
+}
+
+/* Smooth scrolling for mobile menu links */
+@media (max-width: 991px) {
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent horizontal scroll */
+  body.mobile-menu-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    touch-action: none;
+  }
+}
+
+/* Enhanced focus states for accessibility */
+@media (max-width: 991px) {
+  .navbar-nav .nav-link:focus {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 2px;
+  }
+
+  button:focus {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 2px;
+  }
+}
+
+/* Loading animation for mobile */
+@media (max-width: 991px) {
+  .mobile-loading {
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
   }
 }

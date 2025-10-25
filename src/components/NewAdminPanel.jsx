@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AdminProvider, useAdmin } from '../contexts/AdminContext';
 import AdminLogin from './AdminLogin';
-// Changed from NewListingManagement to NewAdminDashboard to include user approval functionality
-import NewAdminDashboard from './NewAdminDashboard';
+import AdminDashboard from './AdminDashboard';
 
 const NewAdminPanelContent = () => {
   const { isAdmin, loading } = useAdmin();
+  const [loadingTimeout, setLoadingTimeout] = useState(false);
+
+  useEffect(() => {
+    // 5 saniye sonra timeout uyarısı göster
+    const timeout = setTimeout(() => {
+      if (loading) {
+        setLoadingTimeout(true);
+        console.warn('⚠️ Admin loading timeout - 5 saniye geçti');
+      }
+    }, 5000);
+
+    return () => clearTimeout(timeout);
+  }, [loading]);
 
   if (loading) {
     return (
@@ -14,22 +26,61 @@ const NewAdminPanelContent = () => {
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '100vh',
-        backgroundColor: '#f5f5f5'
+        backgroundColor: '#f5f5f5',
+        flexDirection: 'column',
+        gap: '1rem'
       }}>
         <div style={{
           padding: '2rem',
           textAlign: 'center'
         }}>
           <div style={{
-            width: '40px',
-            height: '40px',
+            width: '60px',
+            height: '60px',
             border: '4px solid #f3f3f3',
-            borderTop: '4px solid #3498db',
+            borderTop: '4px solid #667eea',
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
             margin: '0 auto 1rem'
           }}></div>
-          <p>Yükleniyor...</p>
+          <h3 style={{ color: '#2c3e50', marginBottom: '0.5rem' }}>
+            Admin Paneli Yükleniyor...
+          </h3>
+          <p style={{ color: '#7f8c8d', fontSize: '0.9rem', marginBottom: '1rem' }}>
+            Lütfen bekleyin, sistem kontrol ediliyor...
+          </p>
+
+          {loadingTimeout && (
+            <div style={{
+              background: '#fff3cd',
+              border: '1px solid #ffeaa7',
+              borderRadius: '8px',
+              padding: '1rem',
+              color: '#856404',
+              fontSize: '0.85rem'
+            }}>
+              <strong>⚠️ Yükleme zaman aşımı!</strong><br />
+              Browser console'u (F12) kontrol edin.<br />
+              Admin kullanıcısı mevcut olmayabilir.
+            </div>
+          )}
+
+          <div style={{ marginTop: '1rem' }}>
+            <button
+              onClick={() => window.location.reload()}
+              style={{
+                padding: '0.5rem 1rem',
+                background: '#667eea',
+                color: 'white',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '0.85rem'
+              }}
+            >
+              Sayfayı Yenile
+            </button>
+          </div>
         </div>
         <style>{`
           @keyframes spin {
@@ -41,8 +92,7 @@ const NewAdminPanelContent = () => {
     );
   }
 
-  // Use NewAdminDashboard instead of NewListingManagement to include user approval functionality
-  return isAdmin ? <NewAdminDashboard /> : <AdminLogin />;
+  return isAdmin ? <AdminDashboard /> : <AdminLogin />;
 };
 
 const NewAdminPanel = () => {

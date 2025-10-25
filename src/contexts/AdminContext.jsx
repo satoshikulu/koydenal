@@ -20,18 +20,36 @@ export const AdminProvider = ({ children }) => {
     // Check if user is admin
     const checkAdminStatus = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        console.log('🔍 Checking admin status...');
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+        if (userError) {
+          console.error('❌ Auth error:', userError);
+          setIsAdmin(false);
+          setUser(null);
+          setLoading(false);
+          return;
+        }
 
         if (user) {
-          const { data: profile } = await supabase
+          console.log('👤 User found:', user.email);
+          const { data: profile, error: profileError } = await supabase
             .from('user_profiles')
             .select('role, status')
             .eq('id', user.id)
             .single();
 
-          console.log('👤 Admin check:', { 
-            userId: user.id, 
-            role: profile?.role, 
+          if (profileError) {
+            console.error('❌ Profile error:', profileError);
+            setIsAdmin(false);
+            setUser(user);
+            setLoading(false);
+            return;
+          }
+
+          console.log('👤 Admin check:', {
+            userId: user.id,
+            role: profile?.role,
             status: profile?.status,
             isAdmin: profile?.role === 'admin' && profile?.status === 'approved'
           });
@@ -44,10 +62,11 @@ export const AdminProvider = ({ children }) => {
           setUser(null);
         }
       } catch (error) {
-        console.error('Error checking admin status:', error);
+        console.error('❌ Error checking admin status:', error);
         setIsAdmin(false);
         setUser(null);
       } finally {
+        console.log('🏁 Setting loading to false...');
         setLoading(false);
       }
     };
@@ -57,17 +76,21 @@ export const AdminProvider = ({ children }) => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('🔐 Auth state changed:', event);
-        
+        console.log('🔐 Auth state changed:', event, session?.user?.email);
+
         if (event === 'SIGNED_IN' && session?.user) {
-          const { data: profile } = await supabase
+          const { data: profile, error: profileError } = await supabase
             .from('user_profiles')
             .select('role, status')
             .eq('id', session.user.id)
             .single();
 
-          console.log('👤 User signed in:', { 
-            userId: session.user.id, 
+          if (profileError) {
+            console.error('❌ Profile error on sign in:', profileError);
+          }
+
+          console.log('👤 User signed in:', {
+            userId: session.user.id,
             role: profile?.role,
             status: profile?.status,
             isAdmin: profile?.role === 'admin' && profile?.status === 'approved'
@@ -80,6 +103,7 @@ export const AdminProvider = ({ children }) => {
           setIsAdmin(false);
           setUser(null);
         }
+        console.log('🏁 Setting loading to false after auth change...');
         setLoading(false);
       }
     );
@@ -138,9 +162,18 @@ export const AdminProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    await supabase.auth.signOut();
-    setIsAdmin(false);
-    setUser(null);
+    try {
+      console.log('🚪 Logging out...');
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Logout error:', error);
+      }
+      setIsAdmin(false);
+      setUser(null);
+      console.log('✅ Logged out successfully');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   const value = {
