@@ -17,11 +17,16 @@ export const AdminProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    let mounted = true;
+
     // Check if user is admin
     const checkAdminStatus = async () => {
       try {
         console.log('🔍 Checking admin status...');
         const { data: { user }, error: userError } = await supabase.auth.getUser();
+        console.log('📥 getUser response:', { user: user?.email, error: userError });
+
+        if (!mounted) return;
 
         if (userError) {
           console.error('❌ Auth error:', userError);
@@ -32,12 +37,16 @@ export const AdminProvider = ({ children }) => {
         }
 
         if (user) {
-          console.log('👤 User found:', user.email);
+          console.log('👤 User found:', user.email, '- Fetching profile...');
           const { data: profile, error: profileError } = await supabase
             .from('user_profiles')
             .select('role, status')
             .eq('id', user.id)
             .single();
+
+          console.log('📥 Profile response:', { profile, error: profileError });
+
+          if (!mounted) return;
 
           if (profileError) {
             console.error('❌ Profile error:', profileError);
@@ -63,11 +72,15 @@ export const AdminProvider = ({ children }) => {
         }
       } catch (error) {
         console.error('❌ Error checking admin status:', error);
-        setIsAdmin(false);
-        setUser(null);
+        if (mounted) {
+          setIsAdmin(false);
+          setUser(null);
+        }
       } finally {
-        console.log('🏁 Setting loading to false...');
-        setLoading(false);
+        if (mounted) {
+          console.log('🏁 Setting loading to false...');
+          setLoading(false);
+        }
       }
     };
 
@@ -78,13 +91,21 @@ export const AdminProvider = ({ children }) => {
       async (event, session) => {
         console.log('🔐 Auth state changed:', event, session?.user?.email);
 
+        if (!mounted) return;
+
         if (event === 'SIGNED_IN' && session?.user) {
           setLoading(true); // Loading başlat
+          console.log('🔄 Fetching profile for signed in user...');
+
           const { data: profile, error: profileError } = await supabase
             .from('user_profiles')
             .select('role, status')
             .eq('id', session.user.id)
             .single();
+
+          console.log('📥 Profile response on sign in:', { profile, error: profileError });
+
+          if (!mounted) return;
 
           if (profileError) {
             console.error('❌ Profile error on sign in:', profileError);
@@ -109,17 +130,24 @@ export const AdminProvider = ({ children }) => {
           setIsAdmin(false);
           setUser(null);
           setLoading(false); // Hemen loading'i kapat
+        } else if (event === 'INITIAL_SESSION') {
+          console.log('🔄 Initial session event - ignoring (handled by checkAdminStatus)');
+        } else {
+          console.log('🔄 Other auth event:', event);
         }
       }
     );
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const loginAsAdmin = async (email, password) => {
     try {
       console.log('🔐 Admin login attempt:', email);
-      
+
       // Supabase auth ile giriş yap
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email,
