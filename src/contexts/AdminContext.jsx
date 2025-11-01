@@ -79,7 +79,9 @@ export const AdminProvider = ({ children }) => {
             isAdmin: profile?.role === 'admin' && profile?.status === 'approved'
           });
 
-          setIsAdmin(profile?.role === 'admin' && profile?.status === 'approved');
+          // Store the actual admin status
+          const isAdminResult = profile?.role === 'admin' && profile?.status === 'approved';
+          setIsAdmin(isAdminResult);
           setUser(user);
         } else {
           console.log('👤 No user logged in');
@@ -138,7 +140,9 @@ export const AdminProvider = ({ children }) => {
             isAdmin: profile?.role === 'admin' && profile?.status === 'approved'
           });
 
-          setIsAdmin(profile?.role === 'admin' && profile?.status === 'approved');
+          // Store the actual admin status
+          const isAdminResult = profile?.role === 'admin' && profile?.status === 'approved';
+          setIsAdmin(isAdminResult);
           setUser(session.user);
           setLoading(false);
         } else if (event === 'SIGNED_OUT') {

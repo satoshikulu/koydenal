@@ -2,7 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { DataProvider } from './context/DataContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { AdminProvider } from './contexts/AdminContext';
-import Navbar from './components/Navbar';
+// Navbar moved to root `src/components` (single source of truth)
+import Navbar from '../../src/components/Navbar';
 import Home from './pages/Home';
 import Products from './pages/Products';
 import CreateAd from './pages/CreateAd';
@@ -10,6 +11,7 @@ import ProductDetail from './pages/ProductDetail';
 import NewAdminPanel from './components/NewAdminPanel';
 import AdminApprovalDashboard from './components/AdminApprovalDashboard';
 import TestEnv from './components/TestEnv';
+import TestSupabase from './components/TestSupabase';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Footer from './components/Footer';
@@ -44,6 +46,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/test-env" element={<TestEnv />} />
+                <Route path="/test-supabase" element={<TestSupabase />} />
               </Routes>
               <Footer />
             </div>

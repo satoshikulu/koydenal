@@ -18,13 +18,82 @@ const Products = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Önce demo verilerini göster
-  useEffect(() => {
-    setFilteredItems(demoItems || []);
-    setLoading(false);
-  }, [demoItems]);
+  // Fetch listings from Supabase
+  const fetchListings = async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-  // Arama önerileri için fonksiyon
+      let query = supabase
+        .from('listings')
+        .select(`
+          *,
+          categories!inner(name)
+        `)
+        .eq('status', 'approved')
+        .order('created_at', { ascending: false });
+
+      // Apply search filter
+      if (filters.q) {
+        query = query.or(`title.ilike.%${filters.q}%,description.ilike.%${filters.q}%,location.ilike.%${filters.q}%`);
+      }
+
+      // Apply category filter
+      if (filters.kategori) {
+        // Map frontend category to database category
+        const categoryMap = {
+          'besi': 'Hayvancılık',
+          'kumes': 'Hayvancılık',
+          'sebze': 'Sebzeler',
+          'sut': 'Hayvancılık',
+          'yem': 'Tahıllar',
+          'makine': 'Ekipman'
+        };
+        
+        const categoryName = categoryMap[filters.kategori];
+        if (categoryName) {
+          query = query.eq('categories.name', categoryName);
+        }
+      }
+
+      // Apply location filter
+      if (filters.mahalle) {
+        query = query.ilike('location', `%${filters.mahalle}%`);
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+
+      // Debug: Log the raw data
+      console.log('Fetched listings:', data);
+
+      // Transform data to match expected format
+      const transformedData = data.map(item => ({
+        id: item.id,
+        title: item.title,
+        cat: item.categories?.name ? item.categories.name.toLowerCase().replace('ı', 'i').replace('ü', 'u').replace('ö', 'o').replace('ç', 'c').replace('ş', 's').replace('ğ', 'g').replace(' ', '-') : 'diğer',
+        mahalle: item.location,
+        price: item.price,
+        unit: item.unit,
+        img: item.main_image || item.images?.[0] || 'https://picsum.photos/400/300?random=1',
+        desc: item.description,
+        contact_email: item.contact_email,
+        contact_phone: item.contact_phone
+      }));
+
+      setFilteredItems(transformedData);
+    } catch (error) {
+      console.error('Veri çekilirken hata:', error);
+      setError('Veri yüklenirken hata oluştu: ' + error.message);
+      // Fallback to demo items if there's an error
+      setFilteredItems(demoItems || []);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Generate search suggestions
   const generateSuggestions = async (query) => {
     if (query.length < 2) {
       setSearchSuggestions([]);
@@ -32,20 +101,27 @@ const Products = () => {
     }
 
     try {
-      // Önce demo verilerinden önerileri al
-      const suggestions = new Set();
-      if (demoItems && demoItems.length > 0) {
-        demoItems.forEach(item => {
-          const titleWords = item.title.toLowerCase().split(/\s+/);
-          const descWords = item.desc.toLowerCase().split(/\s+/);
+      // Get suggestions from Supabase data
+      const { data, error } = await supabase
+        .from('listings')
+        .select('title, description')
+        .eq('status', 'approved')
+        .or(`title.ilike.%${query}%,description.ilike.%${query}%`)
+        .limit(10);
 
-          [...titleWords, ...descWords].forEach(word => {
-            if (word.includes(query.toLowerCase()) && word !== query.toLowerCase()) {
-              suggestions.add(word);
-            }
-          });
+      if (error) throw error;
+
+      const suggestions = new Set();
+      data.forEach(item => {
+        const titleWords = item.title.toLowerCase().split(/\s+/);
+        const descWords = item.description.toLowerCase().split(/\s+/);
+
+        [...titleWords, ...descWords].forEach(word => {
+          if (word.includes(query.toLowerCase()) && word !== query.toLowerCase()) {
+            suggestions.add(word);
+          }
         });
-      }
+      });
 
       setSearchSuggestions(Array.from(suggestions).slice(0, 5));
     } catch (error) {
@@ -59,76 +135,8 @@ const Products = () => {
     generateSuggestions(value);
   };
 
-  // Demo verilerini filtrele
-  const fetchListings = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      // Önce demo verilerini kullan
-      let filtered = demoItems || [];
-
-      // Arama filtresi
-      if (filters.q) {
-        const searchTerm = filters.q.toLowerCase();
-        filtered = filtered.filter(item =>
-          item.title.toLowerCase().includes(searchTerm) ||
-          item.desc.toLowerCase().includes(searchTerm)
-        );
-      }
-
-      // Kategori filtresi
-      if (filters.kategori) {
-        filtered = filtered.filter(item => item.cat === filters.kategori);
-      }
-
-      // Mahalle filtresi
-      if (filters.mahalle) {
-        filtered = filtered.filter(item =>
-          item.mahalle && item.mahalle.includes(filters.mahalle)
-        );
-      }
-
-      setFilteredItems(filtered);
-
-      // Supabase'den de veri çekmeyi dene (opsiyonel)
-      try {
-        let query = supabase
-          .from('listings')
-          .select(`
-            *,
-            categories(name),
-            user_profiles(full_name, email, phone)
-          `)
-          .eq('status', 'approved')
-          .order('created_at', { ascending: false });
-
-        if (filters.q) {
-          query = query.or(`title.ilike.%${filters.q}%,description.ilike.%${filters.q}%,location.ilike.%${filters.q}%`);
-        }
-
-        const { data: supabaseData, error: supabaseError } = await query;
-
-        if (!supabaseError && supabaseData && supabaseData.length > 0) {
-          // Supabase verilerini demo verileriyle birleştir
-          setFilteredItems([...supabaseData, ...filtered]);
-        }
-      } catch (supabaseErr) {
-        console.log('Supabase verisi alınamadı, demo verileri kullanılıyor');
-      }
-
-    } catch (error) {
-      console.error('Veri çekilirken hata:', error);
-      setError('Veri yüklenirken hata oluştu');
-      // Hata durumunda da demo verilerini göster
-      setFilteredItems(demoItems || []);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    // URL parametrelerinden filtreleri al
+    // Get filters from URL parameters
     const params = new URLSearchParams(location.search);
     const newFilters = {
       q: params.get('search') || '',
@@ -140,16 +148,14 @@ const Products = () => {
   }, [location.search]);
 
   useEffect(() => {
-    // Filtreler değiştiğinde demo verilerini filtrele
-    if (demoItems && demoItems.length > 0) {
-      fetchListings();
-    }
-  }, [filters, demoItems]);
+    // Fetch listings when filters change
+    fetchListings();
+  }, [filters]);
 
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
 
-    // URL'i güncelle
+    // Update URL
     const params = new URLSearchParams();
     if (newFilters.q) params.set('search', newFilters.q);
     if (newFilters.kategori) params.set('kategori', newFilters.kategori);

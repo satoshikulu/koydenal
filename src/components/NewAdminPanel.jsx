@@ -8,13 +8,17 @@ const NewAdminPanelContent = () => {
   const [loadingTimeout, setLoadingTimeout] = useState(false);
 
   useEffect(() => {
-    // 5 saniye sonra timeout uyarısı göster
+    // Loading başladığında timeout'u sıfırla
+    setLoadingTimeout(false);
+    
+    // 10 saniye sonra timeout uyarısı göster
     const timeout = setTimeout(() => {
       if (loading) {
         setLoadingTimeout(true);
-        console.warn('⚠️ Admin loading timeout - 5 saniye geçti');
+        console.warn('⚠️ Admin loading timeout - 10 saniye geçti');
+        console.log('💡 Sayfayı yenilemeyi deneyin veya giriş bilgilerinizi kontrol edin');
       }
-    }, 5000);
+    }, 10000);
 
     return () => clearTimeout(timeout);
   }, [loading]);
