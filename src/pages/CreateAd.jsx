@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
+import ImageUpload from '../components/ImageUpload'; // ImageUpload bileşenini import edelim
 
 const CreateAd = () => {
   const [formData, setFormData] = useState({
@@ -18,11 +19,11 @@ const CreateAd = () => {
     sellerName: '',
     phone: '',
     email: '',
-    preferred: 'telefon'
+    preferred: 'telefon',
+    images: [] // Resimler için state ekleyelim
   });
 
   const [errors, setErrors] = useState({});
-  const [imagePreview, setImagePreview] = useState([]);
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
@@ -167,12 +168,39 @@ const CreateAd = () => {
       // Mahalle bilgisini belirle
       const chosenMahalle = formData.mahalle === 'DİĞER' ? formData.locationOther.trim() : formData.mahalle;
 
-      // İmage upload işlemi (şimdilik placeholder)
-      const imageUrls = [];
+      // Resimleri yükle
+      let imageUrls = [];
       if (formData.images && formData.images.length > 0) {
-        // TODO: Image upload işlemi eklenecek
-        // Şimdilik placeholder URL'ler kullanacağız
-        imageUrls.push('https://picsum.photos/400/300?random=' + Date.now());
+        // Resimleri Supabase storage'a yükle
+        const uploadPromises = formData.images.map(async (image, index) => {
+          // Eğer image zaten bir URL ise (mevcut resimler), doğrudan kullan
+          if (typeof image === 'string') {
+            return image;
+          }
+          
+          // Yeni yüklenen resimse, Supabase'e yükle
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('listing_images')
+            .upload(`${user ? user.id : 'guest'}/${Date.now()}_${index}_${image.name}`, image, {
+              cacheControl: '3600',
+              upsert: false
+            });
+          
+          if (uploadError) {
+            console.error('Resim yükleme hatası:', uploadError);
+            return null;
+          }
+          
+          // Public URL al
+          const { data: { publicUrl } } = supabase.storage
+            .from('listing_images')
+            .getPublicUrl(uploadData.path);
+          
+          return publicUrl;
+        });
+        
+        const uploadedUrls = await Promise.all(uploadPromises);
+        imageUrls = uploadedUrls.filter(url => url !== null);
       }
 
       // İlan verisi hazırla
@@ -391,29 +419,13 @@ const CreateAd = () => {
                     </div>
 
                     <div className="col-12">
-                      <label className="form-label" htmlFor="images">Görseller</label>
-                      <input
-                        id="images"
-                        type="file"
-                        className="form-control"
-                        accept="image/*"
-                        multiple
-                        onChange={handleImageChange}
+                      <label className="form-label">Görseller</label>
+                      <ImageUpload 
+                        onImagesChange={(images) => setFormData(prev => ({ ...prev, images }))}
+                        maxImages={5}
+                        existingImages={formData.images}
                       />
                       <div className="form-text">En fazla 5 görsel yükleyin. İlk görsel kapak olarak kullanılır.</div>
-                      {imagePreview.length > 0 && (
-                        <div className="d-flex gap-2 flex-wrap mt-2 image-preview-container">
-                          {imagePreview.map((src, index) => (
-                            <img
-                              key={index}
-                              src={src}
-                              alt={`Preview ${index + 1}`}
-                              style={{ height: '80px', width: '80px', objectFit: 'cover' }}
-                              className="rounded border"
-                            />
-                          ))}
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>
