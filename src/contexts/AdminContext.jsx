@@ -72,15 +72,18 @@ export const AdminProvider = ({ children }) => {
             return;
           }
 
+          // İzin verilen durumlar array'i
+          const allowedStatuses = ['approved', 'active'];
+          const isAdminResult = profile?.role === 'admin' && allowedStatuses.includes(profile?.status);
+          
           console.log('👤 Admin check:', {
             userId: user.id,
             role: profile?.role,
             status: profile?.status,
-            isAdmin: profile?.role === 'admin' && profile?.status === 'approved'
+            isAdmin: isAdminResult
           });
 
           // Store the actual admin status
-          const isAdminResult = profile?.role === 'admin' && profile?.status === 'approved';
           setIsAdmin(isAdminResult);
           setUser(user);
         } else {
@@ -133,15 +136,18 @@ export const AdminProvider = ({ children }) => {
             return;
           }
 
+          // İzin verilen durumlar array'i
+          const allowedStatuses = ['approved', 'active'];
+          const isAdminResult = profile?.role === 'admin' && allowedStatuses.includes(profile?.status);
+          
           console.log('👤 User signed in:', {
             userId: session.user.id,
             role: profile?.role,
             status: profile?.status,
-            isAdmin: profile?.role === 'admin' && profile?.status === 'approved'
+            isAdmin: isAdminResult
           });
 
           // Store the actual admin status
-          const isAdminResult = profile?.role === 'admin' && profile?.status === 'approved';
           setIsAdmin(isAdminResult);
           setUser(session.user);
           setLoading(false);
@@ -198,7 +204,9 @@ export const AdminProvider = ({ children }) => {
         return { success: false, error: 'Bu hesap admin yetkisine sahip değil' };
       }
 
-      if (profile.status !== 'approved') {
+      // İzin verilen durumlar array'i
+      const allowedStatuses = ['approved', 'active'];
+      if (!allowedStatuses.includes(profile.status)) {
         console.error('❌ Not approved:', profile.status);
         await supabase.auth.signOut();
         return { success: false, error: 'Admin hesabınız henüz onaylanmamış' };
