@@ -3,7 +3,7 @@ import { DataProvider } from './context/DataContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { AdminProvider } from './contexts/AdminContext';
 // Navbar moved to root `src/components` (single source of truth)
-import Navbar from '../../src/components/Navbar';
+import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Products from './pages/Products';
 import CreateAd from './pages/CreateAd';
