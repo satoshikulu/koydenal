@@ -32,7 +32,7 @@ export const uploadListingImage = async (file, userId) => {
 
     // Upload file
     const { data, error: uploadError } = await supabase.storage
-      .from('listing-images')
+      .from('listing_images')
       .upload(filePath, file, {
         cacheControl: '3600',
         upsert: false
@@ -45,7 +45,7 @@ export const uploadListingImage = async (file, userId) => {
 
     // Get public URL
     const { data: { publicUrl } } = supabase.storage
-      .from('listing-images')
+      .from('listing_images')
       .getPublicUrl(filePath);
 
     return {
@@ -68,7 +68,7 @@ export const uploadListingImage = async (file, userId) => {
 export const deleteListingImage = async (imagePath) => {
   try {
     const { error } = await supabase.storage
-      .from('listing-images')
+      .from('listing_images')
       .remove([imagePath]);
 
     if (error) {
@@ -91,7 +91,7 @@ export const deleteListingImage = async (imagePath) => {
 export const getUserListingImages = async (userId) => {
   try {
     const { data, error } = await supabase.storage
-      .from('listing-images')
+      .from('listing_images')
       .list(userId, {
         limit: 100,
         sortBy: { column: 'created_at', order: 'desc' }
@@ -105,7 +105,7 @@ export const getUserListingImages = async (userId) => {
     // Get public URLs for all images
     const images = data.map(file => {
       const { data: { publicUrl } } = supabase.storage
-        .from('listing-images')
+        .from('listing_images')
         .getPublicUrl(`${userId}/${file.name}`);
       return publicUrl;
     });

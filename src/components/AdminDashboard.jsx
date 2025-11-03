@@ -191,6 +191,30 @@ const AdminDashboard = () => {
         }
     };
 
+    // Yeni eklenen fonksiyon: İlan silme
+    const handleDeleteListing = async (listingId, listingTitle) => {
+        try {
+            if (!window.confirm(`"${listingTitle}" başlıklı ilanı kalıcı olarak silmek istediğinizden emin misiniz?`)) return;
+            
+            // Önce ilanla ilişkili tüm verileri sil (messages, favorites, listing_views, admin_actions)
+            await supabase.from('messages').delete().eq('listing_id', listingId);
+            await supabase.from('favorites').delete().eq('listing_id', listingId);
+            await supabase.from('listing_views').delete().eq('listing_id', listingId);
+            await supabase.from('admin_actions').delete().eq('listing_id', listingId);
+            
+            // Sonra ilanı sil
+            const { error } = await supabase.from('listings').delete().eq('id', listingId);
+            if (error) throw error;
+            
+            alert('✅ İlan başarıyla silindi');
+            loadStats();
+            loadData();
+        } catch (error) {
+            console.error('Delete listing error:', error);
+            alert('❌ İlan silinemedi: ' + error.message);
+        }
+    };
+
     if (!isAdmin) {
         return (
             <div style={styles.errorContainer}>
@@ -272,7 +296,7 @@ const AdminDashboard = () => {
                 ) : activeTab === 'users' ? (
                     <UsersList users={users} onAction={handleUserAction} onDelete={handleDeleteUser} />
                 ) : (
-                    <ListingsList listings={listings} onAction={handleListingAction} onToggleFeatured={toggleFeatured} onToggleOpportunity={toggleOpportunity} />
+                    <ListingsList listings={listings} onAction={handleListingAction} onToggleFeatured={toggleFeatured} onToggleOpportunity={toggleOpportunity} onDelete={handleDeleteListing} />
                 )}
             </div>
         </div>
@@ -335,7 +359,7 @@ const UsersList = ({ users, onAction, onDelete }) => {
 };
 
 // Listings List Component
-const ListingsList = ({ listings, onAction, onToggleFeatured, onToggleOpportunity }) => {
+const ListingsList = ({ listings, onAction, onToggleFeatured, onToggleOpportunity, onDelete }) => {
     if (listings.length === 0) return <div style={styles.empty}>📋 İlan bulunamadı</div>;
     return (
         <div style={styles.grid}>
@@ -384,6 +408,11 @@ const ListingsList = ({ listings, onAction, onToggleFeatured, onToggleOpportunit
                                 </button>
                             </>
                         )}
+                        {/* İlan silme butonu - tüm durumlar için */}
+                        <button onClick={() => onDelete(listing.id, listing.title)} style={{ ...styles.actionBtn, ...styles.deleteBtn }}>
+                            <Trash2 size={18} />
+                            <span>Sil</span>
+                        </button>
                     </div>
                 </div>
             ))}
