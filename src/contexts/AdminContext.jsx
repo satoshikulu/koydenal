@@ -110,56 +110,19 @@ export const AdminProvider = ({ children }) => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('🔐 Auth state changed:', event, session?.user?.email);
+        console.log('🔐 Auth state changed:', event);
 
         if (!mounted) return;
 
+        // Sadece önemli event'lerde işlem yap
         if (event === 'SIGNED_IN' && session?.user) {
-          setLoading(true); // Loading başlat
-          console.log('🔄 Fetching profile for signed in user...');
-
-          const { data: profile, error: profileError } = await supabase
-            .from('user_profiles')
-            .select('role, status')
-            .eq('id', session.user.id)
-            .single();
-
-          console.log('📥 Profile response on sign in:', { profile, error: profileError });
-
-          if (!mounted) return;
-
-          if (profileError) {
-            console.error('❌ Profile error on sign in:', profileError);
-            setIsAdmin(false);
-            setUser(session.user);
-            setLoading(false);
-            return;
-          }
-
-          // İzin verilen durumlar array'i
-          const allowedStatuses = ['approved', 'active'];
-          const isAdminResult = profile?.role === 'admin' && allowedStatuses.includes(profile?.status);
-          
-          console.log('👤 User signed in:', {
-            userId: session.user.id,
-            role: profile?.role,
-            status: profile?.status,
-            isAdmin: isAdminResult
-          });
-
-          // Store the actual admin status
-          setIsAdmin(isAdminResult);
-          setUser(session.user);
-          setLoading(false);
+          console.log('🔄 User signed in, checking admin status...');
+          await checkAdminStatus();
         } else if (event === 'SIGNED_OUT') {
           console.log('👤 User signed out');
           setIsAdmin(false);
           setUser(null);
-          setLoading(false); // Hemen loading'i kapat
-        } else if (event === 'INITIAL_SESSION') {
-          console.log('🔄 Initial session event - ignoring (handled by checkAdminStatus)');
-        } else {
-          console.log('🔄 Other auth event:', event);
+          setLoading(false);
         }
       }
     );
