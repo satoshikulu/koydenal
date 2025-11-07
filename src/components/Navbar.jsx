@@ -7,21 +7,8 @@ import { Sprout, Zap, Settings } from 'lucide-react';
 const Navbar = () => {
   const location = useLocation();
   const { user, logout } = useAuth();
-  const [isMobile, setIsMobile] = useState(false);
   const navRef = useRef(null);
   const togglerRef = useRef(null);
-
-  // Mobile detection
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 991);
-    };
-
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   const handleLogout = async () => {
     await logout();
