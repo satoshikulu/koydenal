@@ -168,40 +168,8 @@ const CreateAd = () => {
       // Mahalle bilgisini belirle
       const chosenMahalle = formData.mahalle === 'DİĞER' ? formData.locationOther.trim() : formData.mahalle;
 
-      // Resimleri yükle
-      let imageUrls = [];
-      if (formData.images && formData.images.length > 0) {
-        // Resimleri Supabase storage'a yükle
-        const uploadPromises = formData.images.map(async (image, index) => {
-          // Eğer image zaten bir URL ise (mevcut resimler), doğrudan kullan
-          if (typeof image === 'string') {
-            return image;
-          }
-          
-          // Yeni yüklenen resimse, Supabase'e yükle
-          const { data: uploadData, error: uploadError } = await supabase.storage
-            .from('listing_images')
-            .upload(`${user ? user.id : 'guest'}/${Date.now()}_${index}_${image.name}`, image, {
-              cacheControl: '3600',
-              upsert: false
-            });
-          
-          if (uploadError) {
-            console.error('Resim yükleme hatası:', uploadError);
-            return null;
-          }
-          
-          // Public URL al
-          const { data: { publicUrl } } = supabase.storage
-            .from('listing_images')
-            .getPublicUrl(uploadData.path);
-          
-          return publicUrl;
-        });
-        
-        const uploadedUrls = await Promise.all(uploadPromises);
-        imageUrls = uploadedUrls.filter(url => url !== null);
-      }
+      // Resimleri al (ImageUpload component'i zaten URL döndürüyor)
+      const imageUrls = formData.images || [];
 
       // İlan verisi hazırla
       const listingData = {

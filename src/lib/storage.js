@@ -34,6 +34,7 @@ export const uploadListingImage = async (file, userId) => {
     const { data, error: uploadError } = await supabase.storage
       .from('listing_images')
       .upload(filePath, file, {
+        contentType: file.type,
         cacheControl: '3600',
         upsert: false
       });

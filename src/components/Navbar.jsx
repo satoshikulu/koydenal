@@ -2,7 +2,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useState, useEffect, useRef } from 'react';
-import { Sprout, Zap, Settings } from 'lucide-react';
+import { Sprout, Settings } from 'lucide-react';
 
 const Navbar = () => {
   const location = useLocation();
@@ -110,17 +110,6 @@ const Navbar = () => {
                 to="/ilan-ver"
               >
                 İlan Ver
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link
-                className={`nav-link ${location.pathname === '/misafir-ilan-ver' ? 'active' : ''}`}
-                to="/misafir-ilan-ver"
-                style={{ backgroundColor: '#ffc107', color: '#000', borderRadius: '4px' }}
-                title="Üye olmadan ilan ver"
-              >
-                <Zap className="me-1" size={16} />
-                Hızlı İlan Ver
               </Link>
             </li>
 

@@ -69,18 +69,24 @@ const Products = () => {
       console.log('Fetched listings:', data);
 
       // Transform data to match expected format
-      const transformedData = data.map(item => ({
-        id: item.id,
-        title: item.title,
-        cat: item.categories?.name ? item.categories.name.toLowerCase().replace('ı', 'i').replace('ü', 'u').replace('ö', 'o').replace('ç', 'c').replace('ş', 's').replace('ğ', 'g').replace(' ', '-') : 'diğer',
-        mahalle: item.location,
-        price: item.price,
-        unit: item.unit,
-        img: item.main_image || item.images?.[0] || 'https://picsum.photos/400/300?random=1',
-        desc: item.description,
-        contact_email: item.contact_email,
-        contact_phone: item.contact_phone
-      }));
+      const transformedData = data.map(item => {
+        console.log('Processing item:', item.title);
+        console.log('  - main_image:', item.main_image);
+        console.log('  - images:', item.images);
+        
+        return {
+          id: item.id,
+          title: item.title,
+          cat: item.categories?.name ? item.categories.name.toLowerCase().replace('ı', 'i').replace('ü', 'u').replace('ö', 'o').replace('ç', 'c').replace('ş', 's').replace('ğ', 'g').replace(' ', '-') : 'diğer',
+          mahalle: item.location,
+          price: item.price,
+          unit: item.unit,
+          img: item.main_image || item.images?.[0] || 'https://picsum.photos/400/300?random=1',
+          desc: item.description,
+          contact_email: item.contact_email,
+          contact_phone: item.contact_phone
+        };
+      });
 
       setFilteredItems(transformedData);
     } catch (error) {
