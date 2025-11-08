@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../context/DataContext';
+import Typewriter from '../components/Typewriter';
 
 const Home = () => {
   const [mode, setMode] = useState(null);
@@ -106,7 +107,19 @@ const Home = () => {
       <section className="hero">
         <div className="hero-content">
           <h1 className="hero-title fw-bold mb-3">Üretici ile Alıcıyı Tek Platformda Buluşturuyoruz</h1>
-          <p className="hero-subtitle lead mb-4 wave-text">Tarladan sofraya, doğrudan ve güvenli ticaret</p>
+          <p className="hero-subtitle lead mb-4">
+            <Typewriter 
+              texts={[
+                'Tarladan sofraya, doğrudan ve güvenli ticaret',
+                'Çiftçiden tüketiciye, aracısız alışveriş',
+                'Doğal ürünler, güvenilir üreticiler',
+                'Yerel üreticileri destekleyin'
+              ]}
+              speed={80}
+              deleteSpeed={40}
+              pauseTime={2500}
+            />
+          </p>
           <div className="hero-buttons">
             <button
               className="btn btn-sell"

@@ -22,9 +22,7 @@ const ListingSuccess = lazy(() => import('./pages/ListingSuccess'));
 const NewAdminPanel = lazy(() => import('./components/NewAdminPanel'));
 const AdminApprovalDashboard = lazy(() => import('./components/AdminApprovalDashboard'));
 
-// Lazy loading - Misafir özellikleri
-const GuestListingForm = lazy(() => import('./components/GuestListingForm'));
-const GuestListingManagement = lazy(() => import('./components/GuestListingManagement'));
+// GuestListingForm kaldırıldı - CreateAd zaten misafir kullanıcıları destekliyor
 
 // Lazy loading - Test bileşenleri
 const TestEnv = lazy(() => import('./components/TestEnv'));
@@ -66,10 +64,8 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/urunler" element={<Products />} />
                   <Route path="/ilan-ver" element={<CreateAd />} />
-                  <Route path="/misafir-ilan-ver" element={<GuestListingForm />} />
                   <Route path="/ilan-basarili" element={<ListingSuccess />} />
                   <Route path="/ilan-detay/:id" element={<ProductDetail />} />
-                  <Route path="/ilan-yonetim/:listingId" element={<GuestListingManagement />} />
                   <Route path="/admin" element={<NewAdminPanel />} />
                   <Route path="/admin/onay" element={<AdminApprovalDashboard />} />
                   <Route path="/login" element={<Login />} />

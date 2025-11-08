@@ -4,7 +4,6 @@ import { uploadListingImage, deleteListingImage } from '../lib/storage';
 const ImageUpload = ({ onImagesChange, maxImages = 5, existingImages = [] }) => {
   const [images, setImages] = useState(existingImages);
   const [uploading, setUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState({});
   const fileInputRef = useRef(null);
 
   const handleFileSelect = async (event) => {
@@ -18,13 +17,10 @@ const ImageUpload = ({ onImagesChange, maxImages = 5, existingImages = [] }) => 
     setUploading(true);
 
     try {
-      const uploadPromises = files.map(async (file, index) => {
-        setUploadProgress(prev => ({ ...prev, [file.name]: 0 }));
-
-        const result = await uploadListingImage(file, 'temp'); // You might want to use actual user ID
+      const uploadPromises = files.map(async (file) => {
+        const result = await uploadListingImage(file, 'temp');
 
         if (result.success) {
-          setUploadProgress(prev => ({ ...prev, [file.name]: 100 }));
           return result.url;
         } else {
           console.error(`Upload failed for ${file.name}:`, result.error);
@@ -45,7 +41,6 @@ const ImageUpload = ({ onImagesChange, maxImages = 5, existingImages = [] }) => 
       alert('Resim yüklenirken hata oluştu');
     } finally {
       setUploading(false);
-      setUploadProgress({});
       // Reset file input
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
@@ -53,7 +48,7 @@ const ImageUpload = ({ onImagesChange, maxImages = 5, existingImages = [] }) => 
     }
   };
 
-  const handleRemoveImage = async (imageUrl, index) => {
+  const handleRemoveImage = async (imageUrl, imageIndex) => {
     try {
       // Extract file path from URL (this is a simplified approach)
       const urlParts = imageUrl.split('/');
@@ -64,7 +59,7 @@ const ImageUpload = ({ onImagesChange, maxImages = 5, existingImages = [] }) => 
         await deleteListingImage(`${folderName}/${fileName}`);
       }
 
-      const newImages = images.filter((_, i) => i !== index);
+      const newImages = images.filter((_, i) => i !== imageIndex);
       setImages(newImages);
       onImagesChange(newImages);
     } catch (error) {
@@ -96,8 +91,8 @@ const ImageUpload = ({ onImagesChange, maxImages = 5, existingImages = [] }) => 
           gap: '1rem',
           marginBottom: '1rem'
         }}>
-          {images.map((image, index) => (
-            <div key={index} style={{
+          {images.map((image, imageIndex) => (
+            <div key={imageIndex} style={{
               position: 'relative',
               border: '2px solid #e0e0e0',
               borderRadius: '8px',
@@ -106,7 +101,7 @@ const ImageUpload = ({ onImagesChange, maxImages = 5, existingImages = [] }) => 
             }}>
               <img
                 src={image}
-                alt={`Ürün ${index + 1}`}
+                alt={`Ürün ${imageIndex + 1}`}
                 style={{
                   width: '100%',
                   height: '100%',
@@ -115,7 +110,7 @@ const ImageUpload = ({ onImagesChange, maxImages = 5, existingImages = [] }) => 
               />
               <button
                 type="button"
-                onClick={() => handleRemoveImage(image, index)}
+                onClick={() => handleRemoveImage(image, imageIndex)}
                 style={{
                   position: 'absolute',
                   top: '5px',

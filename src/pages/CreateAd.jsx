@@ -331,6 +331,7 @@ const CreateAd = () => {
                           className={`form-control ${errors.price ? 'is-invalid' : ''}`}
                           value={formData.price}
                           onChange={handleInputChange}
+                          placeholder="Örn: 5000000 (nokta kullanmayın)"
                           required
                         />
                         <span className="input-group-text">₺</span>
