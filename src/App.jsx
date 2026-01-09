@@ -10,8 +10,6 @@ import CreateAd from './pages/CreateAd';
 import ProductDetail from './pages/ProductDetail';
 import NewAdminPanel from './components/NewAdminPanel';
 import AdminApprovalDashboard from './components/AdminApprovalDashboard';
-import TestEnv from './components/TestEnv';
-import TestSupabase from './components/TestSupabase';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Footer from './components/Footer';
@@ -51,8 +49,6 @@ function App() {
                 <Route path="/admin/onay" element={<AdminApprovalDashboard />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                <Route path="/test-env" element={<TestEnv />} />
-                <Route path="/test-supabase" element={<TestSupabase />} />
               </Routes>
               <Footer />
             </div>
