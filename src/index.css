@@ -1,0 +1,1481 @@
+:root {
+  /* Modern Renk Paleti */
+  --primary-green: #2e7d32;
+  --primary-light: #4caf50;
+  --primary-dark: #1b5e20;
+  --secondary-orange: #ff9800;
+  --secondary-gold: #ffc107;
+
+  /* Nötr Renkler */
+  --white: #ffffff;
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #eeeeee;
+  --gray-300: #e0e0e0;
+  --gray-400: #bdbdbd;
+  --gray-500: #9e9e9e;
+  --gray-600: #757575;
+  --gray-700: #616161;
+  --gray-800: #424242;
+  --gray-900: #212121;
+
+  /* Glassmorphism Renkleri */
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: rgba(0, 0, 0, 0.1);
+
+  /* Geçişler */
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* Gölgeler */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.2);
+
+  /* Kenar Yuvarlaklıkları */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Modern Tipografi Hiyerarşisi */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--gray-900);
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--gray-900);
+}
+
+h3 {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--gray-800);
+}
+
+h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gray-700);
+}
+
+h6 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--gray-600);
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+
+.lead {
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--gray-700);
+}
+
+/* Özel Başlık Stilleri */
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #ffffff 0%, #fff9e6 50%, var(--secondary-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+  animation: heroTitlePulse 3s ease-in-out infinite;
+}
+
+@keyframes heroTitlePulse {
+  0%, 100% {
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 6px 16px rgba(255, 193, 7, 0.6)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+  }
+}
+
+.hero-content .lead,
+.hero-subtitle {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 1);
+  margin-bottom: 2.5rem;
+  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.5px;
+}
+
+/* Dalgalanma efekti */
+.wave-text {
+  animation: wave 2.5s ease-in-out infinite;
+  display: inline-block;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+  color: var(--gray-900);
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-light) 100%);
+  border-radius: var(--radius-full);
+}
+
+/* Responsive Tipografi */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+
+  .hero-title {
+    font-size: 2.8rem !important;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+
+  .lead {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  .hero-title {
+    font-size: 2.2rem !important;
+  }
+
+  .section-title {
+    font-size: 1.8rem;
+  }
+}
+
+/* Genel görünürlük düzeltmeleri */
+.App {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+section {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Navbar */
+.navbar {
+  backdrop-filter: blur(20px) saturate(180%);
+  background-color: rgba(46, 125, 50, 0.95) !important;
+  box-shadow: var(--shadow-lg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all var(--transition-medium);
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--white) !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-nav .nav-link {
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9) !important;
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 1rem;
+  margin: 0 0.2rem;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+  color: var(--secondary-gold) !important;
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Hero */
+.hero {
+  height: 60vh;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  color: white;
+  background:
+    linear-gradient(135deg, rgba(46, 125, 50, 0.8) 0%, rgba(76, 175, 80, 0.6) 50%, rgba(255, 193, 7, 0.4) 100%),
+    url('https://images.unsplash.com/photo-1500595046743-cd271d694d30?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat;
+  position: relative;
+  min-height: 450px;
+  max-height: 550px;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(46, 125, 50, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 193, 7, 0.2) 0%, transparent 50%);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 750px;
+  padding: 1.5rem 1rem;
+}
+.hero-buttons .btn {
+  margin: 0.6rem;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-medium);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: var(--shadow-lg);
+  min-width: 160px;
+}
+
+.hero-buttons .btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left var(--transition-slow);
+}
+
+.hero-buttons .btn:hover::before {
+  left: 100%;
+}
+
+.btn-buy {
+  background: linear-gradient(135deg, var(--secondary-orange) 0%, var(--secondary-gold) 100%);
+  color: var(--gray-900);
+  box-shadow: 0 8px 25px rgba(255, 152, 0, 0.3);
+}
+
+.btn-buy:hover {
+  transform: translateY(-3px) scale(1.05);
+  background: linear-gradient(135deg, var(--secondary-gold) 0%, var(--secondary-orange) 100%);
+  box-shadow: 0 12px 35px rgba(255, 152, 0, 0.4);
+}
+
+/* Glassmorphism Search */
+.search-area {
+  max-width: 800px;
+  margin: 30px auto 60px auto;
+  padding: 40px;
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--glass-border);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.search-area::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.search-area h4 {
+  color: var(--gray-800);
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.search-area input,
+.search-area select {
+  border-radius: var(--radius-full);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  transition: all var(--transition-medium);
+  font-weight: 500;
+}
+
+.search-area input:focus,
+.search-area select:focus {
+  outline: none;
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1);
+  background: var(--white);
+}
+
+.search-area button {
+  border-radius: var(--radius-full);
+  padding: 1rem 2.5rem;
+  border: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all var(--transition-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-light) 100%);
+  color: var(--white);
+  box-shadow: var(--shadow-md);
+}
+
+.search-area button:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-green) 100%);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Categories - Basit hover efekti sadece renk değişimi */
+.category-card {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 2px solid rgba(46, 125, 50, 0.2);
+  transition: all var(--transition-medium);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  height: 100%;
+}
+
+.category-card:hover {
+  border-color: var(--primary-light);
+  box-shadow: 0 12px 40px rgba(46, 125, 50, 0.25);
+  background: rgba(46, 125, 50, 0.05);
+  transform: translateY(-4px);
+}
+
+.category-card img {
+  height: 220px;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.category-card:hover img {
+  transform: scale(1.05);
+}
+
+.category-card .card-body {
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+.category-card .card-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--gray-800);
+  margin-bottom: 1rem;
+}
+
+.category-card .btn {
+  border-radius: var(--radius-full);
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all var(--transition-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-light) 100%);
+  color: var(--white);
+  border: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.category-card .btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-green) 100%);
+  box-shadow: var(--shadow-md);
+}
+
+/* Category chips */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.chip {
+  background: linear-gradient(135deg, rgba(46, 125, 50, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%);
+  color: var(--primary-green);
+  border: 2px solid rgba(46, 125, 50, 0.2);
+  padding: 12px 20px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all var(--transition-medium);
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.chip::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left var(--transition-slow);
+}
+
+.chip:hover::before {
+  left: 100%;
+}
+
+.chip:hover {
+  background: linear-gradient(135deg, rgba(46, 125, 50, 0.2) 0%, rgba(76, 175, 80, 0.1) 100%);
+  border-color: var(--primary-light);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: var(--shadow-md);
+  color: var(--primary-dark);
+}
+
+.chip.active {
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-light) 100%);
+  color: var(--white);
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, rgba(46, 125, 50, 0.95) 0%, rgba(27, 94, 32, 0.9) 100%);
+  color: var(--white);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  margin-top: 4rem;
+}
+
+footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+footer h5 {
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--secondary-gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 1.1rem;
+}
+
+footer p {
+  opacity: 0.9;
+  font-size: 1rem;
+  max-width: 600px;
+  margin: 0 auto 2rem auto;
+}
+
+footer .social-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+footer .social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+  text-decoration: none;
+  transition: all var(--transition-medium);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+footer .social-links a:hover {
+  background: rgba(255, 193, 7, 0.2);
+  border-color: var(--secondary-gold);
+  color: var(--secondary-gold);
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
+}
+
+/* Search Suggestions */
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  backdrop-filter: blur(20px);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.search-suggestions .suggestion-item {
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-weight: 500;
+  color: var(--gray-700);
+}
+
+.search-suggestions .suggestion-item:hover {
+  background: linear-gradient(135deg, rgba(46, 125, 50, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%);
+  color: var(--primary-green);
+  padding-left: 2rem;
+}
+
+.search-suggestions .suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.hover-bg-light:hover {
+  background: linear-gradient(135deg, rgba(46, 125, 50, 0.1) 0%, rgba(76, 175, 80, 0.05) 100%) !important;
+  color: var(--primary-green) !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.z-index-1000 {
+  z-index: 1000;
+}
+
+/* Genel Buton Stilleri */
+.btn {
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all var(--transition-medium);
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left var(--transition-slow);
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-light) 100%);
+  color: var(--white);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-green) 100%);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-light) 100%);
+  color: var(--white);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-green) 100%);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+/* Genel Form Elemanları */
+.form-control {
+  border-radius: var(--radius-md);
+  border: 2px solid var(--gray-300);
+  padding: 0.75rem 1rem;
+  transition: all var(--transition-medium);
+  background: var(--white);
+  font-weight: 500;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.1);
+  background: var(--white);
+}
+
+.form-select {
+  border-radius: var(--radius-md);
+  border: 2px solid var(--gray-300);
+  padding: 0.75rem 1rem;
+  transition: all var(--transition-medium);
+  background: var(--white);
+  font-weight: 500;
+}
+
+/* Animasyonlar ve Geçiş Efektleri */
+
+/* Sayfa yükleme animasyonu */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  25% {
+    transform: translateY(-3px);
+  }
+  50% {
+    transform: translateY(0px);
+  }
+  75% {
+    transform: translateY(3px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Hero section animasyonları */
+.hero-content h1 {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.hero-content .lead:not(.wave-text) {
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.hero-content .wave-text {
+  animation: fadeInUp 0.8s ease-out 0.2s both, wave 2.5s ease-in-out 1s infinite;
+}
+
+.hero-buttons .btn:first-child {
+  animation: slideInFromLeft 0.6s ease-out 0.4s both;
+}
+
+.hero-buttons .btn:last-child {
+  animation: slideInFromRight 0.6s ease-out 0.5s both;
+}
+
+/* Search area animasyonu */
+.search-area {
+  animation: fadeInUp 0.7s ease-out 0.6s both;
+}
+
+/* Kategori kartları için basit giriş animasyonu */
+.category-card {
+  opacity: 1;
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+/* Ürün kartları için giriş animasyonu */
+.product-card {
+  opacity: 1;
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+/* Butonlar için ripple efekti */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.btn:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Loading animasyonu için spinner */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(46, 125, 50, 0.1);
+  border-left-color: var(--primary-green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus animasyonları */
+.navbar-nav .nav-link:focus,
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+  animation: pulse 0.3s ease-in-out;
+}
+
+/* Card hover için ekstra efektler - sadece renk değişimi */
+/* Ürün Kartları Hover Efektleri */
+.product-card {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--white);
+  border: 2px solid rgba(46, 125, 50, 0.1);
+  transition: all var(--transition-medium);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.product-card:hover {
+  border-color: var(--primary-light);
+  box-shadow: 0 8px 30px rgba(46, 125, 50, 0.2);
+  background: rgba(46, 125, 50, 0.02);
+  transform: translateY(-4px);
+}
+
+.product-card:hover .card-img-top {
+  transform: scale(1.03);
+}
+
+.product-card:hover .card-title {
+  color: var(--primary-green);
+  transition: color var(--transition-medium);
+}
+
+.product-card:hover .btn-success {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-green) 100%);
+  box-shadow: var(--shadow-md);
+}
+
+.product-card:hover .btn-outline-success {
+  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-light) 100%);
+  color: var(--white);
+  border-color: var(--primary-light);
+}
+
+/* Chip hover için ekstra animasyon */
+.chip:hover {
+  animation: pulse 0.4s ease-in-out;
+}
+
+/* Footer için giriş animasyonu */
+footer {
+  animation: slideInFromLeft 0.8s ease-out 0.3s both;
+}
+
+/* Genel sayfa geçişleri */
+* {
+  transition: background-color var(--transition-medium), color var(--transition-medium), border-color var(--transition-medium);
+}
+
+/* Responsive animasyon ayarları */
+@media (prefers-reduced-motion: reduce) {
+  .wave-text {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Küçük ekranlarda dalgalanma efektini azalt */
+@media (max-width: 576px) {
+  .wave-text {
+    animation-duration: 3s;
+    transform: translateY(0px); /* Daha küçük hareket */
+  }
+}
+
+/* Print stilleri için animasyonları kaldırma */
+@media print {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ================= MOBİL UYUMLULUK ================= */
+
+/* Tablet ve mobil cihazlar için responsive tasarım */
+@media (max-width: 768px) {
+  /* Hero section mobil */
+  .hero {
+    height: 50vh;
+    min-height: 350px;
+    background-position: center;
+  }
+
+  .hero-content {
+    padding: 1.5rem 1rem;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: 2.5rem !important;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-content .lead {
+    font-size: 1.1rem !important;
+    margin-bottom: 2rem;
+  }
+
+  .hero-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    width: 100%;
+  }
+
+  .hero-buttons .btn {
+    width: 100%;
+    max-width: 280px;
+    padding: 0.9rem 1.5rem;
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  /* Arama alanı mobil */
+  .search-area {
+    margin: 20px 15px 40px 15px;
+    padding: 25px 20px;
+    max-width: none;
+  }
+
+  .search-area h4 {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .search-area input,
+  .search-area select {
+    width: 100%;
+    margin-bottom: 15px;
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  .search-area button {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+
+  /* Kategoriler mobil */
+  .category-card {
+    margin-bottom: 2rem;
+  }
+
+  .category-card img {
+    height: 180px;
+  }
+
+  .category-card .card-title {
+    font-size: 1.2rem;
+  }
+
+  /* Ürünler sayfası mobil iyileştirmeler */
+  .filters {
+    background: var(--gray-50);
+    border-radius: var(--radius-lg);
+    margin-bottom: 2rem;
+  }
+
+  .filters .form-control,
+  .filters .form-select {
+    border-radius: var(--radius-md);
+    border: 2px solid var(--gray-300);
+  }
+
+  .filters .btn {
+    border-radius: var(--radius-md);
+    font-weight: 600;
+  }
+
+  /* Ürün kartları mobil */
+  .product-card img {
+    height: 200px;
+  }
+
+  .product-card .card-title {
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+
+  /* İlan verme sayfası çok küçük ekranlar */
+  .create-ad-form .form-control,
+  .create-ad-form .form-select {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .create-ad-form .btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .create-ad-form .card-body {
+    padding: 1rem;
+  }
+
+  .create-ad-form .row.g-3 > * {
+    margin-bottom: 1rem;
+  }
+
+  .create-ad-form .form-control:focus,
+  .create-ad-form .form-select:focus {
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+  }
+
+  .create-ad-form .btn {
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+  }
+
+  /* İmage preview mobil */
+  .image-preview-container {
+    gap: 0.5rem !important;
+  }
+
+  .image-preview-container img {
+    height: 60px !important;
+    width: 60px !important;
+    border-radius: var(--radius-sm);
+  }
+
+  /* İpuçları kartı mobil */
+  .tips-card {
+    position: sticky;
+    top: 20px;
+  }
+
+  /* İletişim bölümü mobil */
+  .col-md-6 {
+    margin-bottom: 2rem;
+  }
+
+  /* Genel mobil düzeltmeler */
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  section {
+    padding: 3rem 0;
+  }
+
+  /* Footer mobil */
+  footer {
+    padding: 2rem 1rem;
+    margin-top: 3rem;
+  }
+
+  footer .social-links {
+    gap: 0.8rem;
+  }
+
+  footer .social-links a {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+/* Küçük mobil cihazlar için ek optimizasyonlar */
+@media (max-width: 576px) {
+  /* Hero section çok küçük ekranlar */
+  .hero {
+    height: 45vh;
+    min-height: 300px;
+  }
+
+  .hero-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .hero-title {
+    font-size: 1.9rem !important;
+    letter-spacing: 0;
+  }
+
+  .hero-content .lead {
+    font-size: 1rem !important;
+  }
+
+  .hero-buttons .btn {
+    padding: 0.9rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  /* Arama alanı çok küçük ekranlar */
+  .search-area {
+    padding: 20px 15px;
+    margin: 15px 10px 30px 10px;
+  }
+
+  .search-area h4 {
+    font-size: 1.2rem;
+  }
+
+  .search-area input,
+  .search-area select,
+  .search-area button {
+    padding: 0.9rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Kategoriler çok küçük ekranlar */
+  .category-card img {
+    height: 160px;
+  }
+
+  .category-card .card-body {
+    padding: 1.2rem;
+  }
+
+  .category-card .card-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .category-card .btn {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  /* Chips çok küçük ekranlar */
+  .chips {
+    gap: 8px;
+    margin-top: 1.5rem;
+  }
+
+  .chip {
+    font-size: 0.85rem;
+    padding: 8px 12px;
+  }
+
+  /* Genel çok küçük ekran düzeltmeleri */
+  section {
+    padding: 2rem 0;
+  }
+
+  .section-title {
+    font-size: 1.8rem !important;
+    margin-bottom: 2rem;
+  }
+
+  /* Footer çok küçük ekranlar */
+  footer {
+    padding: 1.5rem 1rem;
+  }
+
+  footer h5 {
+    font-size: 1rem;
+  }
+
+  footer p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Landscape mobil cihazlar için optimizasyon */
+@media (max-width: 896px) and (orientation: landscape) {
+  .hero {
+    height: 80vh;
+    min-height: 500px;
+  }
+
+  .hero-buttons {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .hero-buttons .btn {
+    width: auto;
+    min-width: 200px;
+  }
+}
+
+/* Dokunmatik cihazlar için hover efektleri devre dışı bırakma */
+@media (hover: none) {
+  .category-card:hover,
+  .chip:hover,
+  .btn:hover,
+  footer .social-links a:hover {
+    transform: none;
+    animation: none;
+  }
+}
+
+/* Yüksek çözünürlüklü ekranlar için optimizasyon */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .hero {
+    background-size: cover;
+  }
+}
+
+/* ========================================
+   MOBIL MENÜ & TOUCH DESTEĞİ
+   ======================================== */
+
+/* Mobile menu animations */
+.mobile-menu-backdrop {
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.mobile-menu-container {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Smooth hamburger icon animation */
+.navbar-toggler-icon {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced mobile menu animations */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Improved mobile touch targets */
+@media (max-width: 991px) {
+  .navbar-nav .nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    margin: 0.25rem 0;
+    border-radius: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .navbar-nav .nav-link:hover,
+  .navbar-nav .nav-link:focus {
+    background-color: rgba(13, 110, 253, 0.1);
+    transform: translateX(5px);
+    outline: none;
+  }
+
+  .navbar-nav .nav-link:active {
+    transform: translateX(3px) scale(0.98);
+  }
+
+  /* Prevent text selection in mobile menu */
+  .mobile-menu-container * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Allow text selection for links only */
+  .mobile-menu-container a,
+  .mobile-menu-container button {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
+/* Enhanced button interactions for mobile */
+@media (max-width: 991px) {
+  button {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+
+  .btn {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn:active {
+    transform: scale(0.95);
+  }
+}
+
+/* Smooth scrolling for mobile menu links */
+@media (max-width: 991px) {
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent horizontal scroll */
+  body.mobile-menu-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    touch-action: none;
+  }
+}
+
+/* Enhanced focus states for accessibility */
+@media (max-width: 991px) {
+  .navbar-nav .nav-link:focus {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 2px;
+  }
+
+  button:focus {
+    outline: 2px solid var(--primary-light);
+    outline-offset: 2px;
+  }
+}
+
+/* Loading animation for mobile */
+@media (max-width: 991px) {
+  .mobile-loading {
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+}

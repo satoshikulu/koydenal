@@ -1,0 +1,47 @@
+{
+  "name": "KöydenAL - Doğrudan Çiftçiden Tüketiciye",
+  "short_name": "KöydenAL",
+  "description": "Köy ve küçük işletmelerin ürünlerini satabileceği platform. Kümes hayvanları, süt ürünleri, sebze ve daha fazlası.",
+  "theme_color": "#28a745",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["shopping", "food", "business"],
+  "shortcuts": [
+    {
+      "name": "Yeni İlan Ver",
+      "short_name": "İlan Ver",
+      "description": "Hızlıca yeni ilan oluştur",
+      "url": "/ilan-ver",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Ürünleri Görüntüle",
+      "short_name": "Ürünler",
+      "description": "Tüm ürünleri görüntüle",
+      "url": "/urunler",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}
