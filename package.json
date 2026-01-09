@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "verify-db": "node verify-schema.js",
-    "troubleshoot-db": "node troubleshoot-db.js"
+    "troubleshoot-db": "node troubleshoot-db.js",
+    "check-db": "node check_supabase_database.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.78.0",
